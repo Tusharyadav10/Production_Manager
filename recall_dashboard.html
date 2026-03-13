@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Manager - Recall Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        
+        /* Orange/Red theme for urgent recall actions */
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 16px; padding: 10px; width: 100%; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        .logout-btn { background-color: #dc3545; width: auto; float: right; font-size: 14px; padding: 8px 15px; }
+        
+        input, select { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; box-sizing: border-box; }
+        
+        /* Table styling for the reports */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #343a40; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .danger-row { background-color: #f8d7da !important; color: #721c24; }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <h1>Supply Manager & Recall Portal</h1>
+        <p>Trace defective production batches to active shipments to issue recall notices.</p>
+
+        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #fff8f8; border-left: 5px solid #dc3545;">
+            <h2>Initiate Shipment Trace</h2>
+            <form id="traceForm">
+                <label>Enter Defective Batch ID</label>
+                <input type="text" id="defective_batch_id" placeholder="e.g., a1b2c3d4-..." required>
+                <button type="submit">Locate Affected Shipments</button>
+            </form>
+        </div>
+
+        <div id="resultsArea" style="display: none;">
+            <h2>Affected Shipments</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Shipment ID</th>
+                        <th>Destination</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="shipmentTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

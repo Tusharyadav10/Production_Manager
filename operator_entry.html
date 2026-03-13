@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Portal - Log Production</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        .form-section { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; box-sizing: border-box; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .logout-btn { background-color: #dc3545; width: auto; float: right; font-size: 14px; padding: 8px 15px; }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <h1>Operator Portal</h1>
+        <p>Log a new production run below. This will generate a unique Batch ID.</p>
+
+        <div class="form-section">
+            <form id="batchForm">
+                <label>Product SKU (What are you making?)</label>
+                <input type="text" id="product_sku" placeholder="e.g., MOT-12V" required>
+
+                <label>Machine ID (Which machine are you using?)</label>
+                <input type="text" id="machine_id" placeholder="e.g., MCH-001" required>
+
+                <label>Batch ID</label>
+                <input type="text" id="batch_id" placeholder="e.g., BCH-001" required>
+
+                <label>Product ID</label>
+                <input type="text" id="product_id" placeholder="e.g., PROD-001" required>
+
+                <label>Current Shift</label>
+                <select id="shift" required>
+                    <option value="">-- Select Shift --</option>
+                    <option value="Morning">Morning (06:00 - 14:00)</option>
+                    <option value="Evening">Evening (14:00 - 22:00)</option>
+                    <option value="Night">Night (22:00 - 06:00)</option>
+                </select>
+
+                <label>Quantity Produced</label>
+                <input type="number" id="quantity" placeholder="e.g., 100" required>
+
+                <label>Production Date</label>
+                <input type="date" id="production_date" required>
+
+                <button type="submit">Log Production Batch</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
