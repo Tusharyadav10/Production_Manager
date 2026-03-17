@@ -6,19 +6,14 @@ const router = express.Router();
 // Add new batch
 router.post("/log_batch", async (req, res) => {
   try {
-      const { product_sku, machine_id, batch_id, product_id, shift, quantity, production_date } = req.body;
-
-      if (!product_sku || !machine_id || !batch_id || !product_id || !shift || !quantity || !production_date) {
-        return res.status(400).json({ message: "All fields are required" });
-      }
+      const {  batch_id, product_id, machine_id, shift, quantity, production_date } = req.body;
 
       const { data, error } = await supabase
           .from("production_batches")
           .insert([{
-              product_sku,
-              machine_id,
               batch_id,
               product_id,
+              machine_id,
               shift,
               quantity: Number(quantity),
               production_date

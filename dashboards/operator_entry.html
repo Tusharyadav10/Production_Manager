@@ -42,7 +42,8 @@
             margin-bottom: 1.5rem;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 12px;
             margin-bottom: 1rem;
@@ -94,24 +95,54 @@
         <div id="operator-form" class="form-box">
             <h2>Operator Portal</h2>
             <p>Log a new production run below</p>
-            <form action="/" method="POST">
-                <input type="text" name="batch_id" placeholder="Enter defective Batch ID" required>
-                <input type="text" name="product_id" placeholder="Enter defective Machine ID" required>
-                <input type="text" name="machine_id" placeholder="Enter defective Product ID" required>
+            <form>
+                <input type="text" name="batch_id" id="batch-id" placeholder="Enter defective Batch ID" required>
+                <input type="text" name="product_id" id="product-id" placeholder="Enter defective Machine ID" required>
+                <input type="text" name="machine_id" id="machine-id" placeholder="Enter defective Product ID" required>
                 <select id="shift" required>
                     <option value="">-- Select Shift --</option>
                     <option value="Morning">Morning (06:00 - 14:00)</option>
                     <option value="Evening">Evening (14:00 - 22:00)</option>
                     <option value="Night">Night (22:00 - 06:00)</option>
                 </select>
-                <input type="number" name="quantity" placeholder="Enter quantity produced" required>
-                <input type="date" name="production_date" placeholder="Production Date" required>
+                <input type="number" name="quantity" id="quantity" placeholder="Enter quantity produced" required>
+                <input type="date" name="production_date" id="production-date" placeholder="Production Date" required>
                 <button type="submit" class="btn">Log Production Batch</button>
             </form>
 
         </div>
 
     </div>
+
+    <script>
+        // opertor entry form sumbission handler
+        const operatorForm = document.querySelector('#operator-form form');
+        operatorForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const batch_id = document.getElementById('batch-id').value;
+            const product_id = document.getElementById('product-id').value;
+            const machine_id = document.getElementById('machine-id').value;
+            const shift = document.getElementById('shift').value;
+            const quantity = document.getElementById('quantity').value;
+            const production_date = document.getElementById('production-date').value;
+
+
+            const res = await fetch('/api/operator/log_batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ batch_id, product_id, machine_id, shift, quantity, production_date })
+            });
+
+            const data = await res.json();
+
+            if (data.redirect) {
+                // window.location.href = `/${data.user.role}/dashboard`;
+                alert('Operator entry added successfully');
+            } else {
+                alert(data.message || 'Operator entry failed');
+            }
+        });
+    </script>
 
 </body>
 

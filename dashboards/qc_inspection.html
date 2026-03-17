@@ -92,33 +92,64 @@
 
 <body>
     <div class="dashboard-container">
-        <div id="operator-form" class="form-box">
+        <div id="inspector-form" class="form-box">
             <h2>QC Inspector Portal</h2>
             <p>Evaluate production batches</p>
             <form action="/" method="POST">
-                <input type="text" name="batch_id" placeholder="Enter defective Batch ID" required>
-                <input type="text" name="inspector_id" placeholder="Enter Inspector ID" required>
-                <input type="text" name="inspection_id" placeholder="Enter Inspection ID" required>
-                <select id="inspection_status" required>
+                <input type="text" name="batch_id" id="batch-id" placeholder="Enter defective Batch ID" required>
+                <input type="text" name="inspector_id" id="inspector-id" placeholder="Enter Inspector ID" required>
+                <input type="text" name="inspection_id" id="inspection-id" placeholder="Enter Inspection ID" required>
+                <select id="inspection-status" required>
                     <option value="">-- Pass or Fail --</option>
                     <option value="Pass">Pass</option>
                     <option value="Fail">Fail</option>
                 </select>
-                <select id="defect_type" required>
+                <select id="defect-type" required>
                     <option value="">-- Select Root Defect --</option>
                     <option value="ss">Surface Scratch</option>
                     <option value="de">Dimensional Error</option>
                     <option value="cm">Component Missing</option>
                     <option value="ce">Calibration Error</option>
                 </select>
-                <input type="file" name="evidence_image" >
-                <input type="date" name="inspection_date" placeholder="Inspection Date" required>
+                <input type="file" id="evidence-image" name="evidence_image">
+                <input type="date" name="inspection_date" id="inspection-date" placeholder="Inspection Date" required>
                 <button type="submit" class="btn">Submit Quality Report</button>
             </form>
 
         </div>
 
     </div>
+
+    <script>
+        // inspector form submission handler
+        const inspectorForm = document.querySelector('#inspector-form form');
+        inspectorForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const batch_id = document.getElementById('batch-id').value;
+            const inspector_id = document.getElementById('inspector-id').value;
+            const inspection_id = document.getElementById('inspection-id').value;
+            const inspection_status = document.getElementById('inspection-status').value;
+            const defect_type = document.getElementById('defect-type').value;
+            const evidence = document.getElementById('evidence-image').files[0]; // Assuming you will handle file upload separately
+            const inspection_date = document.getElementById('inspection-date').value;
+
+
+            const res = await fetch('/api/inspector/evaluate_batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ batch_id, inspector_id, inspection_id, inspection_status, defect_type, evidence, inspection_date })
+            });
+
+            const data = await res.json();
+
+            if (data.redirect) {
+                // window.location.href = `/${data.user.role}/dashboard`;
+                alert('QC inspection submitted successfully');
+            } else {
+                alert(data.message || 'QC inspection failed');
+            }
+        });
+    </script>
 
 </body>
 

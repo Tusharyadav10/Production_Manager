@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");
 const { requireAuth, roleRedirects } = require("./middleware/authMiddleware");
 const adminRoutes = require("./routes/admin");
 const operatorRoutes = require("./routes/operator");
+const inspectorRoutes = require("./routes/inspector");
 const recallRoutes = require("./routes/recall");
 require("dotenv").config();
 
@@ -28,6 +29,7 @@ app.use(session({
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/operator", operatorRoutes);
+app.use("/api/inspector", inspectorRoutes);
 app.use("/api/recall", recallRoutes);
 
 // Redirect based on user role
