@@ -9,6 +9,7 @@ const operatorRoutes = require("./routes/operator");
 const inspectorRoutes = require("./routes/inspector");
 const recallRoutes = require("./routes/recall");
 const auditorRoutes = require("./routes/auditor");
+const dashboardRoutes = require("./routes/dashboard");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -17,6 +18,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.static("dashboards"));
 
 // Session setup
 app.use(session({
@@ -33,6 +35,7 @@ app.use("/api/operator", operatorRoutes);
 app.use("/api/inspector", inspectorRoutes);
 app.use("/api/recall", recallRoutes);
 app.use("/api/auditor", auditorRoutes);
+app.use("/api/analytics", dashboardRoutes);
 
 // Redirect based on user role
 app.get("/:role/dashboard", requireAuth(), (req, res) => {

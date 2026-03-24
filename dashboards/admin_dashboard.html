@@ -1,175 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+    .admin-page-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        min-height: 450px; 
+        padding: 20px;
+    }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factory Admin Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+    .main-admin-heading {
+        color: white; 
+        font-size: 2.2rem;
+        margin: 0 0 30px 0;
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+    .admin-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: stretch; /* 1. MAGIC TRICK: Forces both cards to be equal height! */
+        gap: 30px;
+        flex-wrap: wrap;
+        width: 100%;
+    }
 
-        .dashboard-container {
-            background: #fff;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+    .admin-container {
+        background: #fff;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 380px;
+        display: flex;
+        flex-direction: column; /* 2. Turns the card into a flex column */
+    }
 
-        h2 {
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
+    .admin-container h2 { margin-bottom: 0.5rem; color: #333; text-align: center; }
+    .admin-container p.sub { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+    
+    .admin-container form {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* 3. Tells the form to expand and fill up the empty space */
+    }
 
-        p {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
+    .admin-container input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        outline: none;
+        transition: 0.3s;
+        box-sizing: border-box;
+        font-family: inherit;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            outline: none;
-            transition: 0.3s;
-        }
+    .admin-container input:focus { border-color: #764ba2; }
 
-        input:focus {
-            border-color: #764ba2;
-        }
+    .admin-container .btn {
+        width: 100%;
+        padding: 12px;
+        background: #764ba2;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: 0.3s;
+        margin-top: auto; /* 4. MAGIC TRICK: Always pushes the button to the very bottom! */
+    }
 
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background: #764ba2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+    .admin-container .btn:hover { background: #5a378c; }
+</style>
 
-        .btn:hover {
-            background: #5a378c;
-        }
+<div class="admin-page-container">
+    <h1 class="main-admin-heading">Admin Control Panel</h1>
 
-        .toggle-text {
-            margin-top: 1rem;
-        }
-
-        .toggle-text span {
-            color: #764ba2;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="dashboard-container">
-        <div id="admin-panel-machine" class="form-box">
-            <h2>Admin Control Panel</h2>
-            <p>Add new machine</p>
-            <form>
-                <input type="number" name="machine_id" id="machine-id" placeholder="Machine ID" required>
-                <input type="text" name="machine_name" id="machine-name" placeholder="Machine Name" required>
-                <input type="text" name="machine_type" id="machine-type" placeholder="Machine Type" required>
-                <input type="date" name="last_maintenance" id="last-maintenance" placeholder="Last Maintenance Date" required>
+    <div class="admin-wrapper">
+        <div class="admin-container" id="admin-panel-machine">
+            <h2>Add Machine</h2>
+            <p class="sub">Register new equipment</p>
+            <form id="machine-form">
+                <input type="number" id="machine-id" placeholder="Machine ID" required>
+                <input type="text" id="machine-name" placeholder="Machine Name" required>
+                <input type="text" id="machine-type" placeholder="Machine Type" required>
+                <div style="text-align: left; margin-bottom: 5px; color: #666; font-size: 0.85rem;">Last Maintenance:</div>
+                <input type="date" id="last-maintenance" required>
                 <button type="submit" class="btn">Add Machine</button>
             </form>
-
-            <p class="toggle-text">Add new product <span onclick="toggleForm()">Product</span></p>
         </div>
 
-        <div id="admin-panel-product" class="form-box hidden">
-            <h2>Admin Control Panel</h2>
-            <p>Add new product</p>
-            <form action="/" method="POST">
-                <input type="number" name="product_id" id="product-id" placeholder="Product ID" required>
-                <input type="text" name="product_name" id="product-name" placeholder="Product Name" required>
-                <input type="text" name="product_sku" id="product-sku" placeholder="Product SKU" required>
+        <div class="admin-container" id="admin-panel-product">
+            <h2>Add Product</h2>
+            <p class="sub">Register new product SKUs</p>
+            <form id="product-form">
+                <input type="number" id="product-id" placeholder="Product ID" required>
+                <input type="text" id="product-name" placeholder="Product Name" required>
+                <input type="text" id="product-sku" placeholder="Product SKU" required>
                 <button type="submit" class="btn">Add Product</button>
             </form>
-            <p class="toggle-text">Add new machine <span onclick="toggleForm()">Machine</span></p>
         </div>
     </div>
+</div>
 
-    <script>
-        function toggleForm() {
-            const machineForm = document.getElementById('admin-panel-machine');
-            const productForm = document.getElementById('admin-panel-product');
+<script>
+    document.getElementById('machine-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const machine_id = document.getElementById('machine-id').value;
+        const machine_name = document.getElementById('machine-name').value;
+        const machine_type = document.getElementById('machine-type').value;
+        const last_maintenance = document.getElementById('last-maintenance').value;
 
-            machineForm.classList.toggle('hidden');
-            productForm.classList.toggle('hidden');
-        }
-
-        // machine form sumbission handler
-        const machineForm = document.querySelector('#admin-panel-machine form');
-        machineForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const machine_id = document.getElementById('machine-id').value;
-            const machine_name = document.getElementById('machine-name').value;
-            const machine_type = document.getElementById('machine-type').value;
-            const last_maintenance = document.getElementById('last-maintenance').value;
-
-            const res = await fetch('/api/admin/machines', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ machine_id, machine_name, machine_type, last_maintenance })
-            });
-
-            const data = await res.json();
-
-            alert(data.message || 'Machine addition failed');
-            
+        const res = await fetch('/api/admin/machines', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ machine_id, machine_name, machine_type, last_maintenance })
         });
+        const data = await res.json();
+        alert(data.message || 'Machine addition failed');
+        if(res.ok) document.getElementById('machine-form').reset();
+    });
 
+    document.getElementById('product-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const product_id = document.getElementById('product-id').value;
+        const product_name = document.getElementById('product-name').value;
+        const product_sku = document.getElementById('product-sku').value;
 
-        // product form submission handler
-        const productForm = document.querySelector('#admin-panel-product form');
-        productForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const product_id = document.getElementById('product-id').value;
-            const product_name = document.getElementById('product-name').value;
-            const product_sku = document.getElementById('product-sku').value;
-
-            const res = await fetch('/api/admin/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ product_id, product_name, product_sku })
-            });
-
-            const data = await res.json();
-
-            alert(data.message || 'Product addition failed');
-
+        const res = await fetch('/api/admin/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id, product_name, product_sku })
         });
-    </script>
-
-</body>
-
-</html>
+        const data = await res.json();
+        alert(data.message || 'Product addition failed');
+        if(res.ok) document.getElementById('product-form').reset();
+    });
+</script>

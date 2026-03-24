@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factory Control Center</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+        }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="admin-section"></div>
+    <hr class="divider" id="dash-divider">
+    <div id="analytics-section"></div>
+
+    <script>
+        // Updated to return the fetch Promise
+        function loadComponent(url, containerId) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error("Could not load " + url);
+                    return response.text();
+                })
+                .then(html => {
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = html;
+
+                    const scripts = container.querySelectorAll('script');
+                    
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.innerHTML = oldScript.innerHTML;
+                        }
+                        document.body.appendChild(newScript);
+                        oldScript.parentNode.removeChild(oldScript);
+                    });
+                });
+        }
+
+        // 3. Promise.all ensures both pages are fully injected BEFORE animating
+        Promise.all([
+            loadComponent('/admin_dashboard.html', 'admin-section'),
+            loadComponent('/analytics.html', 'analytics-section')
+        ])
+        .then(() => {
+            // 4. Initialize ScrollReveal
+            // 4. Initialize ScrollReveal
+            const sr = ScrollReveal({
+                distance: '60px',
+                duration: 1000,
+                easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+                
+                // CHANGE THIS LINE TO TRUE 👇
+                reset: true 
+            });
+
+            // Animate Admin Forms (slides up)
+            sr.reveal('.admin-container', { 
+                origin: 'bottom', 
+                interval: 200 // Staggers the two forms
+            });
+
+            // Animate the divider line (slides in from left)
+            sr.reveal('.divider', { 
+                origin: 'left',
+                distance: '100px',
+                delay: 200
+            });
+
+            // Animate Analytics Summary Cards (slides up one by one)
+            sr.reveal('.card', { 
+                origin: 'bottom', 
+                interval: 150, // 150ms delay between each card popping up
+                delay: 100
+            });
+
+            // Animate Chart Boxes (slides up one by one)
+            sr.reveal('.chart-box', { 
+                origin: 'bottom', 
+                interval: 200,
+                delay: 300
+            });
+        })
+        .catch(err => console.error("Error loading dashboard components:", err));
+    </script>
+
+</body>
+</html>
