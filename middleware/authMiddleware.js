@@ -1,9 +1,11 @@
 const roleRedirects = {
-    Admin: "/admin_dashboard.html",
+    // Admin: "/admin_dashboard.html",
     Auditor: "/auditor_dashboard.html",
     Operator: "/operator_entry.html",
     QC_Inspector: "/qc_inspection.html",
-    Supply_Manager: "/recall_dashboard.html"
+    Supply_Manager: "/recall_dashboard.html",
+    Admin: "/analytics.html",       
+    QC_Inspector: "/analytics.html"
 };
 
 function requireAuth() {
