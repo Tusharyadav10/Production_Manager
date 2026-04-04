@@ -37,7 +37,7 @@ router.post("/signup", async (req, res) => {
     res.redirect("/index.html");
 
     // Save session
-    req.session.user = { user_id: user.user_id, role: user.role, name: user.name };
+    // req.session.user = { user_id: user.user_id, role: user.role, name: user.name };
 
   } catch (err) {
     console.error(err);
