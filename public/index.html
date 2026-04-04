@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Production Line Management</title>
     <style>
+        /* Base Styles & Reset */
         * {
             margin: 0;
             padding: 0;
@@ -13,36 +14,155 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 5%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #764ba2;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #764ba2;
+        }
+
+        .nav-btn {
+            background: #764ba2;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #5a378c;
+        }
+
+        /* Hero Section */
+        .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10rem 5% 6rem;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* General Section Styles */
+        section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 3rem;
+        }
+
+        /* About Us Section */
+        #about {
+            background: white;
+            text-align: center;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-card {
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .about-card h3 {
+            color: #764ba2;
+            margin-bottom: 1rem;
+        }
+
+        /* Authentication Section (Reused from your code) */
+        #auth-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f4f6f9;
         }
 
         .auth-container {
             background: #fff;
             padding: 2.5rem;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
 
-        h2 {
+        .auth-container h2 {
             margin-bottom: 0.5rem;
             color: #333;
         }
 
-        p {
+        .auth-container p {
             color: #666;
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
         }
 
-        input {
+        input,
+        textarea {
             width: 100%;
             padding: 12px;
             margin-bottom: 1rem;
@@ -50,10 +170,13 @@
             border-radius: 6px;
             outline: none;
             transition: 0.3s;
+            font-family: inherit;
         }
 
-        input:focus {
+        input:focus,
+        textarea:focus {
             border-color: #764ba2;
+            box-shadow: 0 0 0 2px rgba(118, 75, 162, 0.2);
         }
 
         .btn {
@@ -86,69 +209,171 @@
         .hidden {
             display: none;
         }
+
+        /* Contact Section */
+        #contact {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-form {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                /* In a real app, add a hamburger menu here */
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="auth-container">
-        <div id="login-form" class="form-box">
-            <h2>Welcome Back</h2>
-            <p>Enter your details</p>
-            <form action="/api/auth/login" method="POST">
-                <input type="email" id="login-email" name="email" placeholder="Email" required>
-                <input type="password" id="login-password" name="password" placeholder="Password" required>
-                <button type="submit" class="btn">Login</button>
-            </form>
 
-            <p class="toggle-text">Don't have an account? <span onclick="toggleForm()">Sign Up</span></p>
+    <nav>
+        <a href="#" class="logo">ProductionAutomation</a>
+        <div class="nav-links">
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+            <a href="#auth-section">Login</a>
+            <a href="#auth-section" class="nav-btn" onclick="showSignup()">Sign Up</a>
         </div>
+    </nav>
 
-        <div id="signup-form" class="form-box hidden">
-            <h2>Create Account</h2>
-            <p>Fill the form! It only takes a minute</p>
-            <form action="/api/auth/signup" method="POST">
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="text" name="role" placeholder="Role" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit" class="btn">Sign Up</button>
-            </form>
-            <p class="toggle-text">Already have an account? <span onclick="toggleForm()">Login</span></p>
+    <header class="hero">
+        <h1>Streamline Your Production Line</h1>
+        <p>Real-time analytics, role-based access, and seamless efficiency tracking all in one powerful dashboard.</p>
+        <button class="btn" style="width: auto; padding: 12px 30px; background: white; color: #764ba2;"
+            onclick="document.getElementById('auth-section').scrollIntoView();">Get Started Today</button>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">About Us</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <h3>Our Mission</h3>
+                <p>To provide modern manufacturing facilities with the software tools they need to eliminate downtime
+                    and maximize throughput seamlessly.</p>
+            </div>
+            <div class="about-card">
+                <h3>What We Do</h3>
+                <p>We build scalable, cloud-based dashboards that monitor assembly lines, track quality control, and
+                    notify maintenance teams instantly.</p>
+            </div>
+            <div class="about-card">
+                <h3>Why Choose Us</h3>
+                <p>Designed with operators and managers in mind, our platform ensures a zero-learning-curve experience
+                    with powerful underlying analytics.</p>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section id="auth-section">
+        <h2 class="section-title">Access Your Dashboard</h2>
+        <div class="auth-container">
+            <div id="login-form" class="form-box">
+                <h2>Welcome Back</h2>
+                <p>Enter your details to login</p>
+                <form action="/api/auth/login" method="POST">
+                    <input type="email" id="login-email" name="email" placeholder="Email" required>
+                    <input type="password" id="login-password" name="password" placeholder="Password" required>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <p class="toggle-text">Don't have an account? <span onclick="toggleForm()">Sign Up</span></p>
+            </div>
+
+            <div id="signup-form" class="form-box hidden">
+                <h2>Create Account</h2>
+                <p>Fill the form! It only takes a minute</p>
+                <form action="/api/auth/signup" method="POST">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                    <input type="text" name="role" placeholder="Role" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit" class="btn">Sign Up</button>
+                </form>
+                <p class="toggle-text">Already have an account? <span onclick="toggleForm()">Login</span></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-form">
+            <form id="contact-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea rows="5" placeholder="How can we help you?" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Production Line Management. All rights reserved.</p>
+    </footer>
 
     <script>
+        // Toggle between Login and Signup
         function toggleForm() {
             const loginForm = document.getElementById('login-form');
             const signupForm = document.getElementById('signup-form');
-
             loginForm.classList.toggle('hidden');
             signupForm.classList.toggle('hidden');
         }
-    </script>
-    <script>
-    const loginForm = document.querySelector('#login-form form');
-    loginForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
 
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-
-        if (data.redirect) {
-            window.location.href = `/${data.user.role}/dashboard`;
-        } else {
-            alert(data.message || 'Login failed');
+        // Helper to force show signup from Navbar button
+        function showSignup() {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            if (!loginForm.classList.contains('hidden')) {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+            }
         }
-    });
-    </script>
 
+        const loginForm = document.querySelector('#login-form form');
+        loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (data.redirect) {
+                window.location.href = `/${data.user.role}/dashboard`;
+            } else {
+                alert(data.message || 'Login failed');
+            }
+        });
+    </script>
 </body>
 
 </html>
