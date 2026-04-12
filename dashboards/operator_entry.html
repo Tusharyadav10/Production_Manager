@@ -87,14 +87,46 @@
         .hidden {
             display: none;
         }
+                
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
     </style>
 </head>
 
 <body>
     <div class="dashboard-container">
+        
+        <div class="dashboard-header">
+            <div>
+                <h2>Operator Portal</h2>
+                <p style="margin-bottom: 0;">Log a new production run below</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+
         <div id="operator-form" class="form-box">
-            <h2>Operator Portal</h2>
-            <p>Log a new production run below</p>
             <form>
                 <input type="text" name="batch_id" id="batch-id" placeholder="Enter defective Batch ID" required>
                 <input type="text" name="product_id" id="product-id" placeholder="Enter defective Machine ID" required>
@@ -115,7 +147,20 @@
     </div>
 
     <script>
-        // opertor entry form sumbission handler
+
+        // --- Logout Logic ---
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                // Clear local storage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Redirect to login page
+                window.location.href = "/";
+            }
+        }
+
+        // --- Operator Entry Form Logic ---
         const operatorForm = document.querySelector('#operator-form form');
         operatorForm.addEventListener('submit', async function (e) {
             e.preventDefault();

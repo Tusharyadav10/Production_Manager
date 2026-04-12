@@ -126,19 +126,45 @@
             padding: 20px;
             color: #666;
         }
+                
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
-
-        <div class="header">
-            <h1>Audit Logs</h1>
-            <!-- <button class="logout-btn" onclick="logout()">Logout</button> -->
+        
+        <div class="dashboard-header">
+            <div>
+                <h2>Audit Logs</h2>
+                <p style="margin-bottom: 0;">Record of all system activities.</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
         </div>
-
-        <p>Secure record of all system activities.</p>
 
         <div class="filter-section">
             <input type="text" id="searchInput" placeholder="Search by User ID or Action..." onkeyup="filterLogs()">
@@ -163,6 +189,19 @@
 
     <script>
 
+        // --- Logout Logic ---
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                // Clear local storage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Redirect to login page
+                window.location.href = "/";
+            }
+        }
+
+        // --- Fetch Logs from API ---
         var logs = [];
 
         async function fetchLogs() {

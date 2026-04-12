@@ -24,15 +24,63 @@
             background: rgba(255, 255, 255, 0.3);
             margin: 40px 0;
         }
+
+                
+        .dashboard-header {
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
     </style>
 </head>
 <body>
+
+    <div class="dashboard-header">
+        <div>
+            <!-- <h2></h2>
+            <p style="margin-bottom: 0;"></p> -->
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
 
     <div id="admin-section"></div>
     <hr class="divider" id="dash-divider">
     <div id="analytics-section"></div>
 
     <script>
+        
+        // --- Logout Logic ---
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                // Clear local storage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Redirect to login page
+                window.location.href = "/";
+            }
+        }
+
         // Updated to return the fetch Promise
         function loadComponent(url, containerId) {
             return fetch(url)

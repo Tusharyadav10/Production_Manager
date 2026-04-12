@@ -109,17 +109,49 @@
             background: #fefcbf;
             color: #744210;
         }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h2>Recall Portal</h2>
+                <p style="margin-bottom: 0;">Supply Chain Management</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
 
         <!-- Recall Form -->
         <div id="trace-form">
-            <h2>Recall Portal</h2>
-            <p>Initiate Shipment Trace</p>
+            <!-- <h2>Recall Portal</h2>
+            <p>Initiate Shipment Trace</p> -->
 
             <form>
                 <input type="text" id="batch_id" placeholder="Enter defective Batch ID" required>
@@ -145,16 +177,30 @@
         </table>
 
         <div style="margin-top: 10px;">
-          <p>Recall Shipment</p>
-          <form id="recall-form">
-            <input type="text" id="shipment_id" placeholder="Enter Shipment ID" required>
-            <input type="submit" value="Recall Shipment">
-          </form>
+            <p>Recall Shipment</p>
+            <form id="recall-form">
+                <input type="text" id="shipment_id" placeholder="Enter Shipment ID" required>
+                <input type="submit" value="Recall Shipment">
+            </form>
         </div>
 
     </div>
 
     <script>
+        
+        // --- Logout Logic ---
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                // Clear local storage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Redirect to login page
+                window.location.href = "/";
+            }
+        }
+
+        // --- Trace Form Logic ---
         const traceForm = document.querySelector('#trace-form form');
 
         traceForm.addEventListener('submit', async function (e) {
@@ -209,22 +255,22 @@
     </script>
 
     <script>
-    const recallForm = document.getElementById('recall-form');
+        const recallForm = document.getElementById('recall-form');
 
-    recallForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
+        recallForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-      const shipment_id = document.getElementById('shipment_id').value;
+            const shipment_id = document.getElementById('shipment_id').value;
 
-      const res = await fetch('/api/recall/recall_shipment',{
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ shipment_id })
-      });
+            const res = await fetch('/api/recall/recall_shipment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shipment_id })
+            });
 
-      const data = await res.json();
-      alert(data.message);
-    });
+            const data = await res.json();
+            alert(data.message);
+        });
     </script>
 
 </body>

@@ -98,14 +98,46 @@
             color: #aaa;
             font-size: 0.85rem;
         }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
     </style>
 </head>
 
 <body>
     <div class="dashboard-container">
+        
+        <div class="dashboard-header">
+            <div>
+                <h2>QC Inspector Portal</h2>
+                <p style="margin-bottom: 0;">Evaluate production batches</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+
         <div id="inspector-form" class="form-box">
-            <h2>QC Inspector Portal</h2>
-            <p>Evaluate production batches</p>
             <form id="qc-form">
                 <input type="text" id="batch-id" placeholder="Enter defective Batch ID" required>
                 <input type="text" id="inspector-id" placeholder="Enter Inspector ID" required>
@@ -142,6 +174,19 @@
     </div>
 
     <script>
+
+        // --- Logout Logic ---
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                // Clear local storage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Redirect to login page
+                window.location.href = "/";
+            }
+        }
+
         // --- Submission Logic ---
         const inspectorForm = document.getElementById('qc-form');
         const submitBtn = document.getElementById('submit-btn');
