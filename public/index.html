@@ -238,9 +238,7 @@
             padding: 2rem;
         }
 
-
-        /*ISKO HATA*/
-        .fb-main-container {
+        .main-container {
             padding-top: 100px;
             padding-bottom: 100px;
             /* min-height: 80vh; */
@@ -249,7 +247,7 @@
             justify-content: center;
         }
 
-        .fb-content {
+        .content {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -260,12 +258,12 @@
         }
 
         /* Left Side (Text) */
-        .fb-text-section {
+        .text-section {
             flex: 1;
             padding-bottom: 40px;
         }
 
-        .fb-brand-name {
+        .brand-name {
             color: #5a378c;
             font-size: 3.5rem;
             font-weight: 700;
@@ -276,7 +274,7 @@
             /* Forces text to stay on one line */
         }
 
-        .fb-tagline {
+        .tagline {
             font-size: 1.7rem;
             color: #1c1e21;
             line-height: 32px;
@@ -284,7 +282,7 @@
         }
 
         /* Right Side (Card) */
-        .fb-auth-section {
+        .auth-section {
             width: 400px;
             text-align: center;
         }
@@ -319,7 +317,7 @@
         <div class="nav-links">
             <a href="#about">About Us</a>
             <a href="#contact">Contact</a>
-            <a href="#auth-section">Login</a>
+            <a href="#auth-section" onclick="toggleForm()">Login</a>
             <a href="#auth-section" class="nav-btn" onclick="showSignup()">Sign Up</a>
         </div>
     </nav>
@@ -331,27 +329,25 @@
             onclick="document.getElementById('auth-section').scrollIntoView();">Get Started Today</button>
     </header>
 
-    <main class="fb-main-container">
-        <div class="fb-content">
+    <main class="main-container" id="auth-section">
+        <div class="content">
 
-            <div class="fb-text-section">
-                <h1 class="fb-brand-name">Production Automation</h1>
-                <p class="fb-tagline">Real-time analytics, role-based access, and seamless efficiency tracking.</p>
+            <div class="text-section">
+                <h1 class="brand-name">Production Automation</h1>
+                <p class="tagline">Real-time analytics, role-based access, and seamless efficiency tracking.</p>
             </div>
 
-            <div class="fb-auth-section">
+            <div class="auth-section">
                 <div class="auth-card">
                     <div id="login-form">
-                        <form id="login-submission-form" action="/api/auth/login" method="POST">
+                        <form id="login-submission-form">
                             <input type="email" id="login-email" name="email" placeholder="Email address" required>
                             <input type="password" id="login-password" name="password" placeholder="Password" required>
                             <button type="submit" class="btn btn-primary">Log In</button>
                         </form>
-                        <!-- <a href="#" class="forgot-link">Forgotten password?</a> -->
-                        
-                        <!-- <hr class="fb-divider"> -->
                         <div class="create-btn-wrapper">
-                            <button type="button" class="btn btn-success toggle-btn">Create New Account</button>
+                            <p class="toggle-text">Don't have an account? <span onclick="toggleForm()">Sign Up</span>
+                            </p>
                         </div>
                     </div>
 
@@ -360,16 +356,22 @@
                         <p style="color: #606770; margin-bottom: 15px;">It's quick and easy.</p>
                         <form action="/api/auth/signup" method="POST">
                             <input type="text" name="name" placeholder="Full Name" required>
-                            <input type="text" name="role" placeholder="Role" required>
+                            <select name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Operator">Operator</option>
+                                <option value="QC_Inspector">QC Inspector</option>
+                                <option value="Supply_Manager">Supply Manager</option>
+                                <option value="Auditor">Auditor</option>
+                            </select>
                             <input type="email" name="email" placeholder="Email address" required>
                             <input type="password" name="password" placeholder="New password" required>
                             <button type="submit" class="btn btn-success" style="margin-top: 10px;">Sign Up</button>
                         </form>
-                        <a href="#" class="forgot-link toggle-btn"
-                            style="margin-top: 15px; display: inline-block;">Already have an account?</a>
+                        <p class="toggle-text">Already have an account? <span onclick="toggleForm()">Login</span></p>
                     </div>
                 </div>
-                
+
             </div>
 
         </div>
