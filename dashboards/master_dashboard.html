@@ -5,82 +5,241 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Factory Control Center</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    
     <script src="https://unpkg.com/scrollreveal"></script>
 
     <style>
-        body {
+        :root {
+            --primary: #4338ca;
+            --secondary: #0f172a;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --bg-main: #f1f5f9;
+            --bg-nav: rgba(255, 255, 255, 0.95);
+            --border: #e2e8f0;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
             margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding-top: 80px; 
+            min-height: 100vh;
+        }
+
+        /* Navigation Header */
+        .dashboard-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--bg-nav);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5%;
         }
 
         .divider {
             border: 0;
             height: 1px;
-            background: rgba(255, 255, 255, 0.3);
-            margin: 40px 0;
+            background: var(--border);
+            margin: 3rem 0;
+            position: relative;
         }
 
-                
-        .dashboard-header {
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-        }
-
-        .logout-btn {
-            background: #e53e3e;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+        .divider::after {
+            content: 'Analytics Overview';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-main);
+            padding: 0 1rem;
+            color: var(--text-muted);
             font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
-        .logout-btn:hover {
-            background: #c53030;
+        /* Notification System */
+        #notification-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: var(--white);
+            color: var(--secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary);
+            min-width: 300px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            pointer-events: auto;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-header">
-        <div>
-            <!-- <h2></h2>
-            <p style="margin-bottom: 0;"></p> -->
-        </div>
-        <button class="logout-btn" onclick="handleLogout()">Logout</button>
-    </div>
+    <div id="notification-container"></div>
 
-    <div id="admin-section"></div>
-    <hr class="divider" id="dash-divider">
-    <div id="analytics-section"></div>
+    <header class="dashboard-header">
+        <div class="logo">ProAuto Control Center</div>
+        <div class="header-actions">
+            <span class="user-info" id="active-user-display">Administrator</span>
+            <button class="logout-btn" onclick="handleLogout()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="admin-section"></div>
+        <hr class="divider" id="dash-divider">
+        <div id="analytics-section"></div>
+    </main>
 
     <script>
-        
+        // --- Notification Helper (Global scope for injected scripts) ---
+        window.showNotification = function(message) {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<span>${message}</span>`;
+            
+            container.appendChild(notification);
+            
+            requestAnimationFrame(() => {
+                setTimeout(() => notification.classList.add('show'), 10);
+            });
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        };
+
         // --- Logout Logic ---
         function handleLogout() {
-            if (confirm("Are you sure you want to logout?")) {
-                // Clear local storage
+            if (confirm("Are you sure you want to securely log out?")) {
                 localStorage.clear();
                 sessionStorage.clear();
-
-                // Redirect to login page
                 window.location.href = "/";
             }
         }
 
-        // Updated to return the fetch Promise
+        // --- Component Loader ---
         function loadComponent(url, containerId) {
             return fetch(url)
                 .then(response => {
@@ -106,51 +265,55 @@
                 });
         }
 
-        // 3. Promise.all ensures both pages are fully injected BEFORE animating
+        // --- Initialization ---
         Promise.all([
             loadComponent('/admin_dashboard.html', 'admin-section'),
             loadComponent('/analytics.html', 'analytics-section')
         ])
         .then(() => {
-            // 4. Initialize ScrollReveal
-            // 4. Initialize ScrollReveal
+            // Check for user data in storage and update header
+            try {
+                const userObj = JSON.parse(localStorage.getItem('user'));
+                if (userObj && userObj.name) {
+                    document.getElementById('active-user-display').textContent = userObj.name;
+                }
+            } catch (e) { /* default to Administrator */ }
+
+            // Initialize ScrollReveal
             const sr = ScrollReveal({
-                distance: '60px',
-                duration: 1000,
+                distance: '40px',
+                duration: 800,
                 easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-                
-                // CHANGE THIS LINE TO TRUE 👇
                 reset: true 
             });
 
-            // Animate Admin Forms (slides up)
             sr.reveal('.admin-container', { 
                 origin: 'bottom', 
-                interval: 200 // Staggers the two forms
+                interval: 150 
             });
 
-            // Animate the divider line (slides in from left)
             sr.reveal('.divider', { 
                 origin: 'left',
-                distance: '100px',
-                delay: 200
-            });
-
-            // Animate Analytics Summary Cards (slides up one by one)
-            sr.reveal('.card', { 
-                origin: 'bottom', 
-                interval: 150, // 150ms delay between each card popping up
+                distance: '60px',
                 delay: 100
             });
 
-            // Animate Chart Boxes (slides up one by one)
+            sr.reveal('.card', { 
+                origin: 'bottom', 
+                interval: 100,
+                delay: 100
+            });
+
             sr.reveal('.chart-box', { 
                 origin: 'bottom', 
-                interval: 200,
-                delay: 300
+                interval: 150,
+                delay: 200
             });
         })
-        .catch(err => console.error("Error loading dashboard components:", err));
+        .catch(err => {
+            console.error("Error loading dashboard components:", err);
+            showNotification("Warning: Some dashboard modules failed to load.");
+        });
     </script>
 
 </body>
