@@ -10,6 +10,7 @@ const inspectorRoutes = require("./routes/inspector");
 const recallRoutes = require("./routes/recall");
 const auditorRoutes = require("./routes/auditor");
 const dashboardRoutes = require("./routes/dashboard");
+const shipmentsRoutes = require("./routes/shipments");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -36,6 +37,7 @@ app.use("/api/inspector", inspectorRoutes);
 app.use("/api/recall", recallRoutes);
 app.use("/api/auditor", auditorRoutes);
 app.use("/api/analytics", dashboardRoutes);
+app.use("/api/shipments", shipmentsRoutes);
 
 // Redirect based on user role
 app.get("/:role/dashboard", requireAuth(), (req, res) => {

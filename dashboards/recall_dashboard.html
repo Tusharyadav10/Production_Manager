@@ -4,275 +4,668 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supply Manager - Recall Dashboard</title>
-
+    <title>Supply Manager Portal - ProAuto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4338ca;
+            --primary-hover: #3730a3;
+            --secondary: #0f172a;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --bg-alt: #f1f5f9;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --transition: all 0.2s ease-in-out;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2rem;
+            background: var(--bg-light);
+            padding: 100px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .dashboard-container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            max-width: 900px;
-            margin: auto;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        p {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        input {
+        /* Navigation Header */
+        .dashboard-header {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
             border-radius: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @media (min-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            color: var(--secondary);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-light);
+            color: var(--secondary);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            cursor: pointer;
         }
 
         .btn {
-            width: 100%;
-            padding: 12px;
-            background: #764ba2;
-            color: white;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: var(--white);
             border: none;
-            border-radius: 6px;
+            border-radius: var(--radius-md);
             cursor: pointer;
-            font-weight: bold;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .btn:hover {
-            background: #5a378c;
+        .btn:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: var(--danger-hover);
+        }
+
+        /* Recall Engine Specifics */
+        .recall-search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recall-search-bar input {
+            flex-grow: 1;
+            margin-bottom: 0;
         }
 
         .message {
             margin-top: 15px;
-            padding: 10px;
-            border-radius: 6px;
-            background: #e6fffa;
-            color: #2c7a7b;
+            padding: 10px 15px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
             display: none;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            max-height: 400px;
+            display: none;
+            margin-top: 1.5rem;
         }
 
         table {
             width: 100%;
-            margin-top: 20px;
             border-collapse: collapse;
-            display: none;
+            text-align: left;
+            background: var(--white);
         }
 
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
+        th, td {
+            padding: 0.875rem 1rem;
+            font-size: 0.9rem;
         }
 
         th {
-            background: #764ba2;
-            color: white;
+            background: var(--bg-alt);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        tr:nth-child(even) {
-            background: #f9f9f9;
+        td {
+            border-bottom: 1px solid var(--border);
+            color: var(--secondary);
+            font-weight: 500;
         }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--bg-light); }
 
         .status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            padding: 0.25rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
-        .shipped {
-            background: #c6f6d5;
-            color: #22543d;
-        }
+        .status.shipped { background: #dbeafe; color: #1e3a8a; }
+        .status.delivered { background: #dcfce7; color: #166534; }
+        .status.pending { background: #fef3c7; color: #92400e; }
+        .status.cancelled, .status.recalled { background: #fee2e2; color: #991b1b; }
 
-        .pending {
-            background: #fefcbf;
-            color: #744210;
-        }
-
-        .dashboard-header {
+        /* Notifications */
+        #notification-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9999;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: var(--white);
+            color: var(--secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid var(--primary);
+            min-width: 300px;
+            display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            gap: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            pointer-events: auto;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         }
 
-        .logout-btn {
-            background: #e53e3e;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.85rem;
-        }
-
-        .logout-btn:hover {
-            background: #c53030;
-        }
+        .notification.show { transform: translateX(0); opacity: 1; }
+        .notification.success { border-left-color: var(--success); }
+        .notification.error { border-left-color: var(--danger); }
+        .notification.warning { border-left-color: var(--warning); }
     </style>
 </head>
 
 <body>
 
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <div>
-                <h2>Recall Portal</h2>
-                <p style="margin-bottom: 0;">Supply Chain Management</p>
+    <div id="notification-container"></div>
+
+    <header class="dashboard-header">
+        <a href="#" class="logo">ProAuto Supply Portal</a>
+        <div class="header-actions">
+            <span class="user-info" id="active-user-display">Supply Manager</span>
+            <button class="logout-btn" onclick="handleLogout()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        
+        <div class="card card-full">
+            <h2 class="section-title">Recall Trace Engine</h2>
+            <p class="section-subtitle">Find affected shipments linked to defective production batches.</p>
+
+            <form id="trace-form">
+                <div class="recall-search-bar">
+                    <input type="text" id="batch_id" placeholder="Enter Defective Batch ID (e.g., B-1042)" required>
+                    <button type="submit" class="btn" id="trace-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        Scan Shipments
+                    </button>
+                </div>
+            </form>
+
+            <div id="message" class="message"></div>
+
+            <div class="table-responsive" id="table-container">
+                <table id="shipment-table">
+                    <thead>
+                        <tr>
+                            <th>Shipment ID</th>
+                            <th>Batch ID</th>
+                            <th>Customer</th>
+                            <th>Delivery Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
-            <button class="logout-btn" onclick="handleLogout()">Logout</button>
         </div>
 
-        <!-- Recall Form -->
-        <div id="trace-form">
-            <!-- <h2>Recall Portal</h2>
-            <p>Initiate Shipment Trace</p> -->
-
-            <form>
-                <input type="text" id="batch_id" placeholder="Enter defective Batch ID" required>
-                <button type="submit" class="btn">Load Affected Shipments</button>
+        <div class="card">
+            <h2 class="section-title">Execute Recall</h2>
+            <p class="section-subtitle">Manually halt a specific shipment and notify stakeholders.</p>
+            <form id="recall-form">
+                <div class="form-group">
+                    <label>Shipment ID</label>
+                    <input type="text" id="shipment_id" placeholder="Enter Shipment ID" required>
+                </div>
+                <button type="submit" class="btn btn-danger" style="width: 100%;" id="recall-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Recall Shipment
+                </button>
             </form>
         </div>
 
-        <!-- Message -->
-        <div id="message" class="message"></div>
-
-        <!-- Shipment Table -->
-        <table id="shipment-table">
-            <thead>
-                <tr>
-                    <th>Shipment ID</th>
-                    <th>Batch ID</th>
-                    <th>Customer</th>
-                    <th>Delivery Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <div style="margin-top: 10px;">
-            <p>Recall Shipment</p>
-            <form id="recall-form">
-                <input type="text" id="shipment_id" placeholder="Enter Shipment ID" required>
-                <input type="submit" value="Recall Shipment">
+        <div class="card">
+            <h2 class="section-title">New Shipment Entry</h2>
+            <p class="section-subtitle">Register a dispatched batch into the logistics system.</p>
+            <form id="add-shipment-form">
+                <div class="form-group">
+                    <label>Shipment ID</label>
+                    <input type="text" id="add_shipment_id" required>
+                </div>
+                <div class="form-group">
+                    <label>Batch ID</label>
+                    <input type="text" id="add_batch_id" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="add_customer_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Date</label>
+                    <input type="date" id="add_delivery_date" required>
+                </div>
+                <div class="form-group">
+                    <label>Initial Status</label>
+                    <select id="add_status" required>
+                        <option value="" disabled selected>Select Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="In Transit">In Transit</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;" id="add-shipment-btn">Register Shipment</button>
             </form>
         </div>
 
     </div>
 
     <script>
-        
+        // Check for user data in storage and update header
+        try {
+            const userObj = JSON.parse(localStorage.getItem('user'));
+            if (userObj && userObj.name) {
+                document.getElementById('active-user-display').textContent = userObj.name;
+            }
+        } catch (e) { /* default to Supply Manager */ }
+
+        document.getElementById('add_delivery_date').valueAsDate = new Date();
+
+        // --- Notification System ---
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<span>${message}</span>`;
+            
+            container.appendChild(notification);
+            
+            requestAnimationFrame(() => {
+                setTimeout(() => notification.classList.add('show'), 10);
+            });
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
         // --- Logout Logic ---
         function handleLogout() {
-            if (confirm("Are you sure you want to logout?")) {
-                // Clear local storage
+            if (confirm("Are you sure you want to securely log out?")) {
                 localStorage.clear();
                 sessionStorage.clear();
-
-                // Redirect to login page
                 window.location.href = "/";
             }
         }
 
         // --- Trace Form Logic ---
-        const traceForm = document.querySelector('#trace-form form');
-
+        const traceForm = document.getElementById('trace-form');
         traceForm.addEventListener('submit', async function (e) {
             e.preventDefault();
+            const btn = document.getElementById('trace-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Scanning...";
+            btn.disabled = true;
 
             const batch_id = document.getElementById('batch_id').value;
-
-            const res = await fetch('/api/recall/trace', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ batch_id })
-            });
-
-            const data = await res.json();
-
-
-            // Show message
             const messageDiv = document.getElementById('message');
-            messageDiv.style.display = 'block';
-            messageDiv.innerText = data.message || "No message";
+            const tableContainer = document.getElementById('table-container');
+            const tbody = document.querySelector('#shipment-table tbody');
 
-            // Show shipments
-            const table = document.getElementById('shipment-table');
-            const tbody = table.querySelector('tbody');
-            tbody.innerHTML = '';
-
-            if (data.shipments && data.shipments.length > 0) {
-                table.style.display = 'table';
-
-                data.shipments.forEach(shipment => {
-                    const row = document.createElement('tr');
-
-                    row.innerHTML = `
-                    <td>${shipment.shipment_id}</td>
-                    <td>${shipment.batch_id}</td>
-                    <td>${shipment.customer_name}</td>
-                    <td>${shipment.delivery_date}</td>
-                    <td>
-                        <span class="status ${shipment.status.toLowerCase()}">
-                            ${shipment.status}
-                        </span>
-                    </td>
-                `;
-
-                    tbody.appendChild(row);
+            try {
+                const res = await fetch('/api/recall/trace', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ batch_id })
                 });
 
-            } else {
-                table.style.display = 'none';
+                const data = await res.json();
+                
+                messageDiv.style.display = 'block';
+                messageDiv.className = `message ${res.ok && data.shipments?.length > 0 ? 'success' : 'error'}`;
+                messageDiv.innerText = data.message || "Scan complete.";
+
+                tbody.innerHTML = '';
+
+                if (data.shipments && data.shipments.length > 0) {
+                    tableContainer.style.display = 'block';
+                    data.shipments.forEach(shipment => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><strong>${shipment.shipment_id}</strong></td>
+                            <td style="font-family: monospace;">${shipment.batch_id}</td>
+                            <td>${shipment.customer_name}</td>
+                            <td>${shipment.delivery_date}</td>
+                            <td>
+                                <span class="status ${shipment.status.toLowerCase()}">
+                                    ${shipment.status}
+                                </span>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    tableContainer.style.display = 'none';
+                }
+            } catch (err) {
+                console.error("Trace error:", err);
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'message error';
+                messageDiv.innerText = "Connection error while scanning shipments.";
+                tableContainer.style.display = 'none';
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         });
-    </script>
 
-    <script>
+        // --- Recall Form Logic ---
         const recallForm = document.getElementById('recall-form');
-
         recallForm.addEventListener('submit', async function (e) {
             e.preventDefault();
+            const btn = document.getElementById('recall-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Processing...";
+            btn.disabled = true;
 
             const shipment_id = document.getElementById('shipment_id').value;
 
-            const res = await fetch('/api/recall/recall_shipment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ shipment_id })
-            });
+            try {
+                const res = await fetch('/api/recall/recall_shipment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ shipment_id })
+                });
 
-            const data = await res.json();
-            alert(data.message);
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showNotification(data.message || "Recall action processed.", "success");
+                    recallForm.reset();
+                } else {
+                    showNotification(data.message || "Failed to process recall.", "error");
+                }
+            } catch (err) {
+                console.error("Recall error:", err);
+                showNotification("An error occurred while processing the recall.", "error");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // --- Add Shipment Form Logic ---
+        const addShipmentForm = document.getElementById('add-shipment-form');
+        addShipmentForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('add-shipment-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Registering...";
+            btn.disabled = true;
+
+            const shipment_id = document.getElementById('add_shipment_id').value;
+            const batch_id = document.getElementById('add_batch_id').value;
+            const customer_name = document.getElementById('add_customer_name').value;
+            const delivery_date = document.getElementById('add_delivery_date').value;
+            const status = document.getElementById('add_status').value;
+
+            const newShipment = {
+                shipment_id,
+                batch_id,
+                customer_name,
+                delivery_date,
+                status
+            };
+
+            try {
+                const res = await fetch('/api/shipments/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newShipment)
+                });
+
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showNotification(data.message || "Shipment successfully added!", "success");
+                    addShipmentForm.reset();
+                    document.getElementById('add_delivery_date').valueAsDate = new Date();
+                } else {
+                    showNotification(data.message || "Failed to add shipment.", "error");
+                }
+            } catch (err) {
+                console.error("Add shipment error:", err);
+                showNotification("An error occurred while adding the shipment.", "error");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         });
     </script>
-
 </body>
 
 </html>
