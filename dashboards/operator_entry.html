@@ -121,8 +121,15 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-header {
@@ -160,7 +167,8 @@
             font-weight: 500;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1px solid var(--border);
@@ -172,7 +180,8 @@
             font-family: inherit;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--primary);
             background: var(--white);
@@ -254,14 +263,18 @@
             opacity: 1;
         }
 
-        .notification.success { border-left-color: var(--success); }
-        .notification.error { border-left-color: var(--danger); }
+        .notification.success {
+            border-left-color: var(--success);
+        }
 
+        .notification.error {
+            border-left-color: var(--danger);
+        }
     </style>
 </head>
 
 <body>
-    
+
     <div id="notification-container"></div>
 
     <header class="dashboard-header">
@@ -269,7 +282,8 @@
         <div class="header-actions">
             <span class="user-info" id="active-user-display">Line Operator</span>
             <button class="logout-btn" onclick="handleLogout()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                     <polyline points="16 17 21 12 16 7"></polyline>
                     <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -280,7 +294,7 @@
     </header>
 
     <div class="dashboard-container">
-        
+
         <div class="form-header">
             <h2>Log Production Run</h2>
             <p>Enter batch details below</p>
@@ -288,12 +302,17 @@
 
         <div id="operator-form">
             <form id="production-form">
-                <div class="form-group">
-                    <label for="batch-id">Batch ID</label>
-                    <input type="text" name="batch_id" id="batch-id" required>
-                </div>
-                
+
                 <div class="input-row">
+                    <div class="form-group">
+                        <label for="operator-id">Operator ID</label>
+                        <input type="text" name="operator_id" id="operator-id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="batch-id">Batch ID</label>
+                        <input type="text" name="batch_id" id="batch-id" required>
+                    </div>
+
                     <div class="form-group">
                         <label for="product-id">Product ID</label>
                         <input type="text" name="product_id" id="product-id" required>
@@ -326,7 +345,8 @@
                 </div>
 
                 <button type="submit" class="btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                         <polyline points="17 21 17 13 7 13 7 21"></polyline>
                         <polyline points="7 3 7 8 15 8"></polyline>
@@ -356,13 +376,13 @@
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.innerHTML = `<span>${message}</span>`;
-            
+
             container.appendChild(notification);
-            
+
             requestAnimationFrame(() => {
                 setTimeout(() => notification.classList.add('show'), 10);
             });
-            
+
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => notification.remove(), 300);
@@ -380,16 +400,17 @@
 
         // --- Form Logic ---
         const operatorForm = document.getElementById('production-form');
-        
+
         operatorForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const btn = operatorForm.querySelector('button');
             const originalText = btn.innerHTML;
             btn.innerHTML = 'Saving Data...';
             btn.style.opacity = '0.8';
             btn.disabled = true;
 
+            const operator_id = document.getElementById('operator-id').value;
             const batch_id = document.getElementById('batch-id').value;
             const product_id = document.getElementById('product-id').value;
             const machine_id = document.getElementById('machine-id').value;
@@ -403,7 +424,7 @@
                     const res = await fetch('/api/operator/log_batch', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ batch_id, product_id, machine_id, shift, quantity, production_date })
+                        body: JSON.stringify({ batch_id, product_id, machine_id, operator_id, shift, quantity, production_date })
                     });
 
                     // Mock handling if backend isn't ready

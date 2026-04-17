@@ -6,7 +6,7 @@ const router = express.Router();
 // Add new batch
 router.post("/log_batch", async (req, res) => {
   try {
-      const {  batch_id, product_id, machine_id, shift, quantity, production_date } = req.body;
+      const {  batch_id, product_id, machine_id, operator_id, shift, quantity, production_date } = req.body;
 
       const { data, error } = await supabase
           .from("production_batches")
@@ -14,6 +14,7 @@ router.post("/log_batch", async (req, res) => {
               batch_id,
               product_id,
               machine_id,
+              operator_id,
               shift,
               quantity: Number(quantity),
               production_date
