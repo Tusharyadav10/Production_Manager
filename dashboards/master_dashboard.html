@@ -64,25 +64,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .logo::before {
-            content: '';
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background: var(--primary);
-            border-radius: 6px;
-        }
-
         .header-actions {
             display: flex;
             align-items: center;
@@ -190,7 +171,7 @@
     <div id="notification-container"></div>
 
     <header class="dashboard-header">
-        <div class="logo">ProAuto Control Center</div>
+        <div class="logo"> Control Center</div>
         <div class="header-actions">
             <span class="user-info" id="active-user-display">Administrator</span>
             <button class="logout-btn" onclick="handleLogout()">
