@@ -248,8 +248,8 @@
 
         // --- Initialization ---
         Promise.all([
-            loadComponent('/admin_dashboard.html', 'admin-section'),
-            loadComponent('/analytics.html', 'analytics-section')
+            loadComponent('/dashboards/admin_dashboard.html', 'admin-section'),
+            loadComponent('/dashboards/analytics.html', 'analytics-section')
         ])
         .then(() => {
             // Check for user data in storage and update header

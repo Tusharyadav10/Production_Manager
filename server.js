@@ -19,7 +19,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(express.static("dashboards"));
 
 // Session setup
 app.use(session({
@@ -42,7 +41,7 @@ app.use("/api/shipments", shipmentsRoutes);
 // Redirect based on user role
 app.get("/:role/dashboard", requireAuth(), (req, res) => {
       const redirectUrl = roleRedirects[req.session.user.role];
-      res.sendFile(path.join(__dirname, "/dashboards", redirectUrl));
+      res.sendFile(path.join(__dirname, "public/dashboards", redirectUrl));
 });
 
 // Default route
