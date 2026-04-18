@@ -76,4 +76,28 @@ router.post("/recall_shipment", async (req, res) => {
   }
 });
 
+// Defective shipments
+router.post("/defective_shipments", async (req, res) => {
+  try {
+    const { data: batches } = await supabase
+        .from("qc_inspections")
+        .select("batch_id")
+        .eq("status", "Fail");
+
+    const batchIds = batches?.map(batch => batch.batch_id) || [];
+
+    const { data, error } = await supabase
+      .from("shipments")
+      .select("*")
+      .in("batch_id", batchIds);
+
+    if (error) throw error;
+
+    res.json({ defective_shipments: data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
