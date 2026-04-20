@@ -65,12 +65,13 @@ operatorForm.addEventListener('submit', async function (e) {
                 body: JSON.stringify({ batch_id, product_id, machine_id, operator_id, shift, quantity, production_date })
             });
 
+            const data = await res.json();
+            
             if (!res.ok) {
-                showNotification('Batch logged successfully (Simulation mode)', 'success');
+                showNotification(data.message || 'Failed to log batch.', 'error');
                 operatorForm.reset();
                 document.getElementById('production-date').valueAsDate = new Date();
             } else {
-                const data = await res.json();
                 showNotification(data.message || 'Batch logged successfully.', 'success');
                 operatorForm.reset();
                 document.getElementById('production-date').valueAsDate = new Date();
