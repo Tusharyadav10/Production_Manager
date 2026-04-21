@@ -77,7 +77,7 @@ router.post("/recall_shipment", async (req, res) => {
 });
 
 // Defective shipments
-router.post("/defective_shipments", async (req, res) => {
+router.get("/defective_shipments", async (req, res) => {
   try {
     const { data: batches } = await supabase
         .from("qc_inspections")
@@ -92,7 +92,7 @@ router.post("/defective_shipments", async (req, res) => {
       .in("batch_id", batchIds);
 
     if (error) throw error;
-
+    console.log("Defective shipments found:", data?.length || 0);
     res.json({ defective_shipments: data });
   } catch (err) {
     console.error(err);
