@@ -25,7 +25,7 @@ router.post("/log_batch", async (req, res) => {
 
       res.status(201).json({ message: "Production batch logged successfully!", batch: data[0] });
       } catch (err) {
-      console.error(err);
+    //   console.error(err);
       res.status(500).json({ message: "Server error" });
       }
 });

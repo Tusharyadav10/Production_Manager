@@ -42,7 +42,7 @@ body {
 #notification-container {
     position: fixed;
     top: 80px;
-    right: 20px;
+    right: 25px;
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -58,7 +58,7 @@ body {
     box-shadow: var(--shadow-lg);
     border-left: 4px solid var(--info);
     min-width: 300px;
-    max-width: 400px;
+    max-width: 500px;
     display: flex;
     align-items: center;
     justify-content: space-between;

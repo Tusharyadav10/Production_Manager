@@ -33,8 +33,15 @@ router.post("/signup", async (req, res) => {
 
     if (error) throw error;
 
+    const { data: user, error2 } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    res.json({ message: "Signup successful", success: true, user_id: user.user_id });
     // Redirect to login page
-    res.redirect("/index.html");
+    // res.redirect("/index.html");
 
     // Save session
     // req.session.user = { user_id: user.user_id, role: user.role, name: user.name };

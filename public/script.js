@@ -18,7 +18,7 @@ function showNotification(message, type = 'info') {
 
     setTimeout(() => {
         closeNotification(notification);
-    }, 5000);
+    }, 10000);
 }
 
 function closeNotification(element) {
@@ -121,10 +121,12 @@ signupFormElement.addEventListener('submit', async function (e) {
 
         const data = await res.json();
 
-        if (data.redirect) {
-            window.location.href = `/${data.user.role}/dashboard`;
-        } else if (res.ok || data.success) {
-            showNotification(data.message || 'Account created successfully! Please log in.', 'success');
+        // if (data.redirect) {
+        //     window.location.href = `/${data.user.role}/dashboard`;
+        // } else
+        if (res.ok || data.success) {
+            const success_msg = 'Account created successfully! Your user id: ' + data.user_id;
+            showNotification(success_msg, 'success');
             toggleForm('login');
             this.reset();
         } else {
