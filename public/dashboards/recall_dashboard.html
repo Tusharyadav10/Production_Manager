@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supply Manager Portal - </title>
+    <title>Supply Manager Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,11 +16,12 @@
     <div id="notification-container"></div>
 
     <header class="dashboard-header">
-        <a href="#" class="logo"> Supply Portal</a>
+        <a href="#" class="logo">Supply Portal</a>
         <div class="header-actions">
             <span class="user-info" id="active-user-display">Supply Manager</span>
             <button class="logout-btn" onclick="handleLogout()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                     <polyline points="16 17 21 12 16 7"></polyline>
                     <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -31,28 +32,53 @@
     </header>
 
     <div class="main-layout">
-        
+
+        <div class="card card-full">
+            <h2 class="section-title">Defective Shipments Registry</h2>
+            <p class="section-subtitle">Real-time list of shipments linked to batches that failed QC inspection.</p>
+
+            <div class="table-responsive">
+                <table id="shipment-table">
+                    <thead>
+                        <tr>
+                            <th>Shipment ID</th>
+                            <th>Batch ID</th>
+                            <th>Customer</th>
+                            <th>Delivery Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="defective-batches-tbody">
+                        <tr>
+                            <td colspan="5" class="table-loader">Initializing shipment data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="card card-full">
             <h2 class="section-title">Recall Trace Engine</h2>
-            <p class="section-subtitle">Find affected shipments linked to defective production batches.</p>
+            <p class="section-subtitle">Deep search to identify all shipments for specific batch IDs.</p>
 
             <form id="trace-form">
                 <div class="recall-search-bar">
                     <input type="text" id="batch_id" placeholder="Enter Defective Batch ID" required>
                     <button type="submit" class="btn" id="trace-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
-                        Scan Shipments
+                        Scan Logistics
                     </button>
                 </div>
             </form>
 
             <div id="message" class="message"></div>
 
-            <div class="table-responsive" id="table-container">
-                <table id="shipment-table">
+            <div class="table-responsive" id="table-container" style="display: none;">
+                <table id="trace-results-table">
                     <thead>
                         <tr>
                             <th>Shipment ID</th>
@@ -69,14 +95,15 @@
 
         <div class="card">
             <h2 class="section-title">Execute Recall</h2>
-            <p class="section-subtitle">Manually halt a specific shipment and notify stakeholders.</p>
+            <p class="section-subtitle">Issue a formal recall for a specific shipment ID.</p>
             <form id="recall-form">
                 <div class="form-group">
                     <label>Shipment ID</label>
                     <input type="text" id="shipment_id" placeholder="Enter Shipment ID" required>
                 </div>
                 <button type="submit" class="btn btn-danger" style="width: 100%;" id="recall-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                         <polyline points="22 4 12 14.01 9 11.01"></polyline>
                     </svg>
@@ -117,7 +144,6 @@
                         <option value="Shipped">Shipped</option>
                         <option value="In Transit">In Transit</option>
                         <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
                     </select>
                 </div>
                 <button type="submit" class="btn" style="width: 100%;" id="add-shipment-btn">Register Shipment</button>
