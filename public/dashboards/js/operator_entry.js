@@ -1,3 +1,5 @@
+let user_id = null;
+
 // Check authentication on page load
 async function checkAuth() {
     try {
@@ -11,6 +13,7 @@ async function checkAuth() {
         }
 
         const data = await res.json();
+        user_id = data.user.user_id;
         document.getElementById('active-user-display').textContent = data.user.name;
 
     } catch (err) {
@@ -79,7 +82,7 @@ operatorForm.addEventListener('submit', async function (e) {
     btn.style.opacity = '0.8';
     btn.disabled = true;
 
-    const operator_id = document.getElementById('operator-id').value;
+    const operator_id = user_id;
     const batch_id = document.getElementById('batch-id').value;
     const product_id = document.getElementById('product-id').value;
     const machine_id = document.getElementById('machine-id').value;

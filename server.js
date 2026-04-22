@@ -45,7 +45,7 @@ app.get("/:role/dashboard", requireAuth(), (req, res) => {
 });
 
 // Default route
-app.post("/", (req, res) => res.redirect("/index.html"));
+app.get("/", (req, res) => res.redirect("/index.html"));
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

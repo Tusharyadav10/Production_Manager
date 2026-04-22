@@ -1,3 +1,5 @@
+let user_id = null;
+
 // Check authentication on page load
 async function checkAuth() {
     try {
@@ -11,6 +13,7 @@ async function checkAuth() {
         }
 
         const data = await res.json();
+        user_id = data.user.user_id;
         document.getElementById('active-user-display').textContent = data.user.name;
 
     } catch (err) {
@@ -164,7 +167,7 @@ document.getElementById('add-shipment-form').addEventListener('submit', async fu
         customer_name: document.getElementById('add_customer_name').value,
         delivery_date: document.getElementById('add_delivery_date').value,
         status: document.getElementById('add_status').value,
-        supply_manager_id: document.getElementById('add_supply_manager_id').value
+        supply_manager_id: user_id
     };
     try {
         const res = await fetch('/api/shipments/add', {
