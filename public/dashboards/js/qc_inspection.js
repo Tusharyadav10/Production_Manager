@@ -1,3 +1,5 @@
+let user_id = null;
+
 // Check authentication on page load
 async function checkAuth() {
     try {
@@ -11,6 +13,7 @@ async function checkAuth() {
         }
 
         const data = await res.json();
+        user_id = data.user.user_id;
         document.getElementById('active-user-display').textContent = data.user.name;
 
     } catch (err) {
@@ -73,9 +76,13 @@ const submitBtn = document.getElementById('submit-btn');
 
 inspectorForm.addEventListener('submit', async function (e) {
     e.preventDefault();
+    let publicUrl = null;
+    let flag = 1;
     const file = document.getElementById('evidence-image').files[0];
     console.log("Selected File Name:", file ? file.name : "No file selected");
-    if (!file) return showNotification("Please select an evidence image.", "error");
+    if (!file) {
+        flag = 0;
+    }
 
     const originalBtnContent = submitBtn.innerHTML;
 
@@ -87,25 +94,26 @@ inspectorForm.addEventListener('submit', async function (e) {
                         <polyline points="17 6 23 6 23 12"></polyline>
                     </svg> Processing...`;
 
-        // 1. Get S3 URL
-        const urlRes = await fetch(`/api/inspector/get_s3_upload_url?filename=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}`);
+        if (flag) {
+            // 1. Get S3 URL
+            const urlRes = await fetch(`/api/inspector/get_s3_upload_url?filename=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}`);
 
-        if (!urlRes.ok) {
-            throw new Error("Failed to get upload URL. Simulation mode active.");
+            if (!urlRes.ok) {
+                throw new Error("Failed to get upload URL. Simulation mode active.");
+            }
+
+            const { uploadUrl, publicUrl } = await urlRes.json();
+
+            // 2. Upload to S3
+            await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
         }
-
-        const { uploadUrl, publicUrl } = await urlRes.json();
-
-        // 2. Upload to S3
-        await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
-
         // 3. Save to Supabase
         const res = await fetch('/api/inspector/evaluate_batch', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 batch_id: document.getElementById('batch-id').value,
-                inspector_id: document.getElementById('inspector-id').value,
+                inspector_id: user_id,
                 inspection_id: document.getElementById('inspection-id').value,
                 status: document.getElementById('inspection-status').value,
                 defect: document.getElementById('defect-type').value,
