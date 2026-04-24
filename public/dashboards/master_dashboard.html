@@ -196,6 +196,9 @@
 
     <script>
         // Check authentication on page load
+        let user_id = null;
+
+        // Check authentication on page load
         async function checkAuth() {
             try {
                 const res = await fetch('/api/auth/check-session', {
@@ -208,6 +211,7 @@
                 }
 
                 const data = await res.json();
+                user_id = data.user.user_id;
                 document.getElementById('active-user-display').textContent = data.user.name;
 
             } catch (err) {
@@ -216,6 +220,7 @@
         }
 
         checkAuth();
+
         // --- Notification Helper (Global scope for injected scripts) ---
         window.showNotification = function (message) {
             const container = document.getElementById('notification-container');
