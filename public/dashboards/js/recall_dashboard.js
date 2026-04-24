@@ -95,46 +95,46 @@ async function fetchAndRenderDefectiveShipments() {
 }
 
 // --- Trace Form Logic ---
-// document.getElementById('trace-form').addEventListener('submit', async function (e) {
-//     e.preventDefault();
-//     const btn = document.getElementById('trace-btn');
-//     const batch_id = document.getElementById('batch_id').value;
-//     const container = document.getElementById('table-container');
-//     const tbody = document.querySelector('#trace-results-table tbody');
+document.getElementById('trace-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const btn = document.getElementById('trace-btn');
+    const batch_id = document.getElementById('batch_id').value;
+    const container = document.getElementById('table-container');
+    const tbody = document.querySelector('#trace-results-table tbody');
 
-//     btn.disabled = true;
-//     try {
-//         const res = await fetch('/api/recall/trace', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ batch_id })
-//         });
-//         const data = await res.json();
+    btn.disabled = true;
+    try {
+        const res = await fetch('/api/recall/trace', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ batch_id })
+        });
+        const data = await res.json();
 
-//         tbody.innerHTML = '';
-//         if (data.shipments && data.shipments.length > 0) {
-//             container.style.display = 'block';
-//             data.shipments.forEach(s => {
-//                 const tr = document.createElement('tr');
-//                 tr.innerHTML = `
-//                             <td><strong>${s.shipment_id}</strong></td>
-//                             <td>${s.batch_id}</td>
-//                             <td>${s.customer_name}</td>
-//                             <td>${new Date(s.delivery_date).toLocaleDateString()}</td>
-//                             <td><span class="status ${s.status.toLowerCase()}">${s.status}</span></td>
-//                         `;
-//                 tbody.appendChild(tr);
-//             });
-//         } else {
-//             container.style.display = 'none';
-//             showNotification("No shipments found for this batch.", "warning");
-//         }
-//     } catch (err) {
-//         showNotification("Error scanning shipments.", "error");
-//     } finally {
-//         btn.disabled = false;
-//     }
-// });
+        tbody.innerHTML = '';
+        if (data.shipments && data.shipments.length > 0) {
+            container.style.display = 'block';
+            data.shipments.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                            <td><strong>${s.shipment_id}</strong></td>
+                            <td>${s.batch_id}</td>
+                            <td>${s.customer_name}</td>
+                            <td>${new Date(s.delivery_date).toLocaleDateString()}</td>
+                            <td><span class="status ${s.status.toLowerCase()}">${s.status}</span></td>
+                        `;
+                tbody.appendChild(tr);
+            });
+        } else {
+            container.style.display = 'none';
+            showNotification("No shipments found for this batch.", "warning");
+        }
+    } catch (err) {
+        showNotification("Error scanning shipments.", "error");
+    } finally {
+        btn.disabled = false;
+    }
+});
 
 // --- Execute Recall Logic ---
 document.getElementById('recall-form').addEventListener('submit', async function (e) {
