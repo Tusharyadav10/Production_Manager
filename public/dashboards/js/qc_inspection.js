@@ -1,6 +1,51 @@
 let user_id = null;
 
-// Check authentication on page load
+// --- Load Recent Inspections ---
+async function loadInspections() {
+    if (!user_id) return;
+
+    try {
+        const res = await fetch(`/api/inspector/get_inspections?inspector_id=${user_id}`);
+        const tbody = document.getElementById('inspections-tbody');
+        
+        if (!res.ok) {
+            tbody.innerHTML = '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--danger);">Failed to load recent inspections.</td></tr>';
+            return;
+        }
+
+        const data = await res.json();
+        const inspections = data.inspections || data || [];
+        
+        tbody.innerHTML = '';
+        
+        if (inspections.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--text-muted);">No recent inspections found.</td></tr>';
+            return;
+        }
+
+        inspections.forEach(ins => {
+            const tr = document.createElement('tr');
+            
+            const dateObj = new Date(ins.inspection_date);
+            const formattedDate = isNaN(dateObj) ? ins.inspection_date : dateObj.toLocaleDateString();
+            
+            const statusColor = ins.status.toLowerCase() === 'pass' ? 'var(--success)' : 'var(--danger)';
+            const defectText = ins.defect && ins.defect !== 'None' ? ins.defect : '-';
+
+            tr.innerHTML = `
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${ins.batch_id}</td>
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: ${statusColor}; font-weight: 600;">${ins.status}</td>
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${defectText}</td>
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${formattedDate}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error("Fetch inspections error:", err);
+        document.getElementById('inspections-tbody').innerHTML = '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--danger);">Error connecting to server.</td></tr>';
+    }
+}
+
 async function checkAuth() {
     try {
         const res = await fetch('/api/auth/check-session', {
@@ -15,6 +60,8 @@ async function checkAuth() {
         const data = await res.json();
         user_id = data.user.user_id;
         document.getElementById('active-user-display').textContent = data.user.name;
+
+        loadInspections();
 
     } catch (err) {
         window.location.replace("/");

@@ -115,4 +115,33 @@ router.get('/get_batch_evidence', async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 });
+
+router.get("/get_inspections", async (req, res) => {
+    try {
+        const inspectorId = req.query.inspector_id;
+
+        let query = supabase
+            .from("qc_inspections")
+            .select("batch_id, status, defect, inspection_date")
+            .order("inspection_date", { ascending: false })
+            .limit(20);
+
+        if (inspectorId) {
+            query = query.eq("inspector_id", Number(inspectorId));
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.error("Fetch inspections error:", error);
+            return res.status(500).json({ message: "Database error", error: error.message });
+        }
+
+        res.status(200).json({ inspections: data });
+    } catch (err) {
+        console.error("=== FULL ERROR ===", err);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
 module.exports = router; 
