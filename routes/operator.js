@@ -96,4 +96,34 @@ router.post("/log_batch", async (req, res) => {
     }
 });
 
+router.get("/get_batches", async (req, res) => {
+    try {
+        const operatorId = req.query.operator_id;
+
+        let query = supabase
+            .from("production_batches")
+            .select("batch_id, product_id, quantity, production_date")
+            .order("production_date", { ascending: false })
+            .limit(20);
+
+        // Filter by operator_id if provided
+        if (operatorId) {
+            query = query.eq("operator_id", Number(operatorId));
+            console.log("Fetching batches for operator_id:", operatorId);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.error("Fetch batches error:", error);
+            return res.status(500).json({ message: "Database error fetching batches", error: error.message });
+        }
+
+        res.status(200).json({ batches: data });
+    } catch (err) {
+        console.error("=== FULL ERROR ===", err);
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
 module.exports = router;

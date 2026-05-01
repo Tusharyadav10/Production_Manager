@@ -1,5 +1,47 @@
 let user_id = null;
 
+async function loadBatches() {
+    if (!user_id) return;
+
+    try {
+        const res = await fetch(`/api/operator/get_batches?operator_id=${user_id}`);
+        const tbody = document.getElementById('batches-tbody');
+
+        if (!res.ok) {
+            tbody.innerHTML = '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--danger);">Failed to load recent batches.</td></tr>';
+            return;
+        }
+
+        const data = await res.json();
+        const batches = data.batches || data || [];
+
+        tbody.innerHTML = '';
+
+        if (batches.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--text-muted);">No recent batches found.</td></tr>';
+            return;
+        }
+
+        batches.forEach(b => {
+            const tr = document.createElement('tr');
+
+            const dateObj = new Date(b.production_date);
+            const formattedDate = isNaN(dateObj) ? b.production_date : dateObj.toLocaleDateString();
+
+            tr.innerHTML = `
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${b.batch_id}</td>
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${b.product_id}</td>
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${b.quantity}</td>
+                <td style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--secondary);">${formattedDate}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error("Fetch batches error:", err);
+        document.getElementById('batches-tbody').innerHTML = '<tr><td colspan="4" style="padding: 1rem; text-align: center; color: var(--danger);">Error connecting to server.</td></tr>';
+    }
+}
+
 // Check authentication on page load
 async function checkAuth() {
     try {
@@ -15,6 +57,8 @@ async function checkAuth() {
         const data = await res.json();
         user_id = data.user.user_id;
         document.getElementById('active-user-display').textContent = data.user.name;
+
+        loadBatches();
 
     } catch (err) {
         window.location.replace("/");
@@ -99,7 +143,7 @@ operatorForm.addEventListener('submit', async function (e) {
             });
 
             const data = await res.json();
-            
+
             if (!res.ok) {
                 showNotification(data.message || 'Failed to log batch.', 'error');
                 operatorForm.reset();
@@ -108,6 +152,8 @@ operatorForm.addEventListener('submit', async function (e) {
                 showNotification(data.message || 'Batch logged successfully.', 'success');
                 operatorForm.reset();
                 document.getElementById('production-date').valueAsDate = new Date();
+
+                loadBatches();
             }
 
             btn.innerHTML = originalText;

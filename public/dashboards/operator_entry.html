@@ -33,6 +33,41 @@
 
     <div class="dashboard-container">
 
+        <!-- DB Batches Table Container (Styled inline to avoid modifying main CSS block) -->
+        <div
+            style="margin-bottom: 2rem; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+            <div
+                style="background: var(--bg-light); padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--secondary); font-size: 0.95rem;">
+                Recent Production Batches
+            </div>
+            <div style="max-height: 200px; overflow-y: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                    <thead style="background: var(--bg-light); position: sticky; top: 0;">
+                        <tr>
+                            <th
+                                style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500;">
+                                Batch ID</th>
+                            <th
+                                style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500;">
+                                Product ID</th>
+                            <th
+                                style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500;">
+                                Qty</th>
+                            <th
+                                style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500;">
+                                Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batches-tbody">
+                        <tr>
+                            <td colspan="4" style="padding: 1rem; text-align: center; color: var(--text-muted);">Loading
+                                recent batches...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="form-header">
             <h2>Log Production Run</h2>
             <p>Enter batch details below</p>
@@ -55,7 +90,7 @@
                         <label for="machine-id">Machine ID</label>
                         <input type="text" name="machine_id" id="machine-id" required>
                     </div>
-                
+
                     <div class="form-group">
                         <label for="shift">Operating Shift</label>
                         <select id="shift" name="shift" required>
