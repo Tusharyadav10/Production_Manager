@@ -1,4 +1,20 @@
 <style>
+    :root {
+        --primary: #4338ca;
+        --primary-hover: #3730a3;
+        --secondary: #0f172a;
+        --text-main: #334155;
+        --text-muted: #64748b;
+        --bg-light: #f8fafc;
+        --white: #ffffff;
+        --border: #e2e8f0;
+        --radius-md: 0.5rem;
+        --radius-lg: 1rem;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
     .admin-page-container {
         display: flex;
         flex-direction: column;
@@ -6,10 +22,11 @@
         align-items: center;
         padding: 2rem 0;
         animation: fadeIn 0.4s ease-out forwards;
+        font-family: system-ui, -apple-system, sans-serif;
     }
 
     .main-admin-heading {
-        color: var(--secondary, #0f172a);
+        color: var(--secondary);
         font-size: 2.25rem;
         font-weight: 700;
         margin: 0 0 2.5rem 0;
@@ -18,63 +35,62 @@
     }
 
     .admin-wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-        gap: 2rem;
+        display: flex;
+        justify-content: center;
         width: 100%;
         max-width: 900px;
         margin-bottom: 2rem;
     }
 
     .admin-container {
-        background: var(--white, #ffffff);
+        background: var(--white);
         padding: 2.5rem;
-        border-radius: var(--radius-lg, 1rem);
-        box-shadow: var(--shadow-md, 0 4px 6px -1px rgb(0 0 0 / 0.1));
-        border: 1px solid var(--border, #e2e8f0);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border);
         display: flex;
         flex-direction: column;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .admin-container.full-width {
-        grid-column: 1 / -1;
+        width: 100%;
     }
 
     .admin-container:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lg, 0 20px 25px -5px rgb(0 0 0 / 0.1));
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
     }
 
     .admin-container h2 {
         margin-bottom: 0.25rem;
-        color: var(--secondary, #0f172a);
+        color: var(--secondary);
         text-align: center;
         font-size: 1.5rem;
         font-weight: 600;
     }
 
     .admin-container p.sub {
-        color: var(--text-muted, #64748b);
+        color: var(--text-muted);
         font-size: 0.95rem;
         margin-bottom: 2rem;
         text-align: center;
     }
 
-    .admin-container form {
+    .admin-container form, .control-group {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        max-width: 500px;
+        margin: 0 auto;
+        width: 100%;
     }
 
-    .admin-container input {
+    .admin-container input, .admin-container select {
         width: 100%;
         padding: 0.75rem 1rem;
         margin-bottom: 1.25rem;
-        border: 1px solid var(--border, #e2e8f0);
-        border-radius: var(--radius-md, 0.5rem);
-        background: var(--bg-light, #f8fafc);
-        color: var(--text-main, #334155);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--bg-light);
+        color: var(--text-main);
         font-size: 0.95rem;
         outline: none;
         transition: all 0.2s ease-in-out;
@@ -82,131 +98,170 @@
         font-family: inherit;
     }
 
-    .admin-container input:focus {
-        border-color: var(--primary, #4338ca);
-        background: var(--white, #ffffff);
+    .admin-container input:focus, .admin-container select:focus {
+        border-color: var(--primary);
+        background: var(--white);
         box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
     }
+    
+    .admin-container select:disabled {
+        background: #e2e8f0;
+        cursor: not-allowed;
+        color: var(--text-muted);
+    }
 
-    .input-label {
-        text-align: left;
-        margin-bottom: 0.5rem;
-        color: var(--text-main, #334155);
+    .date-filters {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+
+    .date-input-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .date-input-wrapper label {
         font-size: 0.85rem;
         font-weight: 500;
+        color: var(--text-main);
+        margin-bottom: 0.5rem;
+    }
+
+    .date-input-wrapper input {
+        margin-bottom: 0;
+    }
+
+    .filter-actions {
+        display: flex;
+        gap: 1rem;
+        max-width: 500px;
+        margin: 0 auto;
+        width: 100%;
+        align-items: center;
+    }
+
+    .filter-actions select {
+        margin-bottom: 0;
+        flex: 1;
     }
 
     .admin-container .btn {
         width: 100%;
         padding: 0.875rem 1.5rem;
-        background: var(--primary, #4338ca);
+        background: var(--primary);
         color: white;
         border: none;
-        border-radius: var(--radius-md, 0.5rem);
+        border-radius: var(--radius-md);
         cursor: pointer;
         font-size: 1rem;
         font-weight: 600;
         transition: all 0.2s ease-in-out;
-        margin-top: auto;
+        margin-top: 1rem;
     }
 
     .admin-container .btn:hover {
-        background: var(--primary-hover, #3730a3);
+        background: var(--primary-hover);
         transform: translateY(-1px);
         box-shadow: var(--shadow-sm);
     }
 
+    .admin-container .btn-reset {
+        background: var(--text-muted);
+        margin-top: 0;
+        width: auto;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .admin-container .btn-reset:hover {
+        background: var(--text-main);
+    }
+
     .divider {
-        margin: 2rem 0 1.5rem;
+        margin: 2.5rem 0;
         border: 0;
-        border-top: 1px solid var(--border, #e2e8f0);
+        border-top: 1px solid var(--border);
     }
 
-    .list-title {
-        font-size: 1.1rem;
-        color: var(--secondary, #0f172a);
-        margin-bottom: 1rem;
-        font-weight: 600;
-    }
-
-    .table-container {
-        max-height: 250px;
+    .results-container {
+        max-height: 600px;
         overflow-y: auto;
-        border: 1px solid var(--border, #e2e8f0);
-        border-radius: var(--radius-md, 0.5rem);
-    }
-
-    .table-container.tall {
-        max-height: 400px;
-    }
-
-    table {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--bg-light);
+        padding: 1rem;
+        margin-top: 1.5rem;
+        display: none;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
         width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-        background: var(--white, #ffffff);
+        box-sizing: border-box;
     }
 
-    th,
-    td {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
+    details.batch-details {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
     }
 
-    th {
-        background: var(--bg-light, #f8fafc);
-        color: var(--text-muted, #64748b);
+    details.batch-details > summary {
+        padding: 1rem 1.25rem;
         font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        border-bottom: 1px solid var(--border, #e2e8f0);
+        color: var(--primary);
+        cursor: pointer;
+        font-size: 1.05rem;
+        background: var(--bg-light);
+        border-bottom: 1px solid transparent;
+        transition: background 0.2s ease;
+    }
+    
+    details.batch-details[open] > summary {
+        border-bottom: 1px solid var(--border);
     }
 
-    td {
-        border-bottom: 1px solid var(--border, #e2e8f0);
-        color: var(--secondary, #0f172a);
+    details.batch-details > summary:hover {
+        background: #e2e8f0;
     }
 
-    tr:last-child td {
+    .item-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        background: var(--white);
+    }
+
+    .item-list li {
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        font-size: 0.85rem;
+        color: var(--text-main);
+        border-bottom: 1px dashed var(--border);
+        position: relative;
+        font-family: monospace;
+    }
+
+    .item-list li:before {
+        content: "↳";
+        position: absolute;
+        left: 1.25rem;
+        color: var(--text-muted);
+    }
+
+    .item-list li:last-child {
         border-bottom: none;
     }
 
-    tr:hover td {
-        background: var(--bg-light, #f8fafc);
-    }
-
-    .inline-form {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-start;
-        margin-bottom: 1.5rem;
-    }
-
-    .inline-form input {
-        margin-bottom: 0;
-        flex-grow: 1;
-    }
-
-    .inline-form .btn {
-        margin-top: 0;
-        width: auto;
-        white-space: nowrap;
-    }
-
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(15px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 
@@ -214,38 +269,6 @@
     <h1 class="main-admin-heading">Admin Control Panel</h1>
 
     <div class="admin-wrapper">
-        <div class="admin-container" id="admin-panel-machine">
-            <h2>Add Machine</h2>
-            <p class="sub">Register new equipment to the floor</p>
-            <form id="machine-form">
-                <input type="number" id="machine-id" placeholder="Machine ID" required>
-                <input type="text" id="machine-name" placeholder="Machine Name" required>
-                <input type="text" id="machine-type" placeholder="Machine Type" required>
-                <div class="input-label">Last Maintenance:</div>
-                <input type="date" id="last-maintenance" required>
-                <button type="submit" class="btn">Register Machine</button>
-            </form>
-
-            <hr class="divider">
-            <h3 class="list-title">Registered Machines</h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Type</th>
-                        </tr>
-                    </thead>
-                    <tbody id="machine-list-body">
-                        <tr>
-                            <td colspan="3" style="text-align: center; color: #64748b;">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <div class="admin-container" id="admin-panel-product">
             <h2>Add Product</h2>
             <p class="sub">Register new product SKUs for tracking</p>
@@ -255,86 +278,46 @@
                 <input type="text" id="product-sku" placeholder="Product SKU" required>
                 <button type="submit" class="btn">Register Product</button>
             </form>
-
-            <hr class="divider">
-            <h3 class="list-title">Registered Products</h3>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>SKU</th>
-                        </tr>
-                    </thead>
-                    <tbody id="product-list-body">
-                        <tr>
-                            <td colspan="3" style="text-align: center; color: #64748b;">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 
     <div class="admin-wrapper">
-        <div class="admin-container full-width">
-            <h2>Production Batches Overview</h2>
-            <p class="sub">Complete record of all production batches</p>
-            <div class="table-container tall">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Batch ID</th>
-                            <th>Product ID</th>
-                            <th>Machine ID</th>
-                            <th>Quantity</th>
-                            <th>Date</th>
-                            <th>Shift</th>
-                        </tr>
-                    </thead>
-                    <tbody id="batches-list-body">
-                        <tr>
-                            <td colspan="6" style="text-align: center; color: #64748b;">Loading batches...</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="admin-container">
+            <h2>Product Batch Lookup</h2>
+            <p class="sub">Select a product, apply optional date filters, and select a batch</p>
+            
+            <div class="control-group">
+                <select id="product-selector">
+                    <option value="">Loading products...</option>
+                </select>
             </div>
-        </div>
-    </div>
 
-    <div class="admin-wrapper">
-        <div class="admin-container full-width">
-            <h2>Batch Details & Analytics</h2>
-            <p class="sub">Search a Batch ID to view manufacturing details and aggregate quantities</p>
-
-            <form id="batch-breakdown-form" class="inline-form">
-                <input type="text" id="search-batch-id" placeholder="Enter Batch ID (e.g., BATCH-1042)" required>
-                <button type="submit" class="btn">Analyze Batch</button>
-            </form>
-
-            <div id="batch-results-area" style="display: none;">
-                <h3 class="list-title">Manufactured Breakdown</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Identifier (Name / ID)</th>
-                                <th>Manufactured Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody id="breakdown-list-body">
-                        </tbody>
-                    </table>
+            <div class="date-filters">
+                <div class="date-input-wrapper">
+                    <label for="filter-start-date">From Date</label>
+                    <input type="date" id="filter-start-date">
                 </div>
+                <div class="date-input-wrapper">
+                    <label for="filter-end-date">To Date</label>
+                    <input type="date" id="filter-end-date">
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <select id="batch-selector" disabled>
+                    <option value="" disabled selected>-- Select a Batch --</option>
+                </select>
+                <button type="button" id="reset-filters-btn" class="btn btn-reset">Reset</button>
+            </div>
+
+            <div id="results-container" class="results-container">
+                <!-- Results injected here -->
             </div>
         </div>
     </div>
 </div>
 
 <script>
-
     window.notify = window.notify || function (msg, type = 'info') {
         if (typeof window.showNotification === 'function') {
             window.showNotification(msg, type);
@@ -354,100 +337,149 @@
         }
     };
 
-    const loadMachines = async () => {
-        const tbody = document.getElementById('machine-list-body');
-        const data = await fetchJSON('/api/admin/machines', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: user_id }),
-        });
+    let allBatches = [];
 
-        tbody.innerHTML = '';
-        if (data && data.machines && data.machines.length > 0) {
-            data.machines.forEach(m => {
-                tbody.innerHTML += `<tr><td>${m.machine_id}</td><td>${m.machine_name}</td><td>${m.machine_type}</td></tr>`;
-            });
+    const productSelector = document.getElementById('product-selector');
+    const batchSelector = document.getElementById('batch-selector');
+    const startDateInput = document.getElementById('filter-start-date');
+    const endDateInput = document.getElementById('filter-end-date');
+    const resultsContainer = document.getElementById('results-container');
+    const resetBtn = document.getElementById('reset-filters-btn');
+
+    const initializeLookup = async () => {
+        const currentUserId = typeof user_id !== 'undefined' ? user_id : (window.user_id || 1);
+
+        const [productsData, batchesData] = await Promise.all([
+            fetchJSON('/api/admin/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: currentUserId }),
+            }),
+            fetchJSON('/api/admin/production_batches', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: currentUserId }),
+            })
+        ]);
+
+        const products = productsData?.products || [];
+        allBatches = batchesData?.batches || [];
+
+        productSelector.innerHTML = '<option value="" disabled selected>-- Select a Product --</option>';
+
+        if (products.length === 0) {
+            productSelector.innerHTML = '<option value="" disabled>No products registered yet</option>';
+            return;
+        }
+
+        products.forEach(p => {
+            const option = document.createElement('option');
+            option.value = String(p.product_id).trim();
+            option.textContent = `${p.product_name} (SKU: ${p.product_sku} | ID: ${p.product_id})`;
+            productSelector.appendChild(option);
+        });
+    };
+
+    const updateBatches = () => {
+        const selectedProductId = productSelector.value;
+        const startDateVal = startDateInput.value;
+        const endDateVal = endDateInput.value;
+        
+        resultsContainer.style.display = 'none';
+
+        if (!selectedProductId) {
+            batchSelector.innerHTML = '<option value="" disabled selected>-- Select a Batch --</option>';
+            batchSelector.disabled = true;
+            return;
+        }
+
+        let filteredBatches = allBatches.filter(b => String(b.product_id).trim() === selectedProductId);
+
+        if (startDateVal) {
+            const start = new Date(startDateVal);
+            start.setHours(0, 0, 0, 0);
+            filteredBatches = filteredBatches.filter(b => b.production_date && new Date(b.production_date) >= start);
+        }
+
+        if (endDateVal) {
+            const end = new Date(endDateVal);
+            end.setHours(23, 59, 59, 999);
+            filteredBatches = filteredBatches.filter(b => b.production_date && new Date(b.production_date) <= end);
+        }
+
+        batchSelector.innerHTML = '<option value="" disabled selected>-- Select a Batch --</option>';
+
+        if (filteredBatches.length === 0) {
+            batchSelector.innerHTML = '<option value="" disabled selected>No batches found for selected criteria</option>';
+            batchSelector.disabled = true;
         } else {
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #64748b;">No machines found</td></tr>';
+            filteredBatches.forEach(b => {
+                const dateStr = b.production_date ? new Date(b.production_date).toLocaleDateString() : 'Unknown Date';
+                const option = document.createElement('option');
+                option.value = String(b.batch_id).trim();
+                option.textContent = `Batch ID: ${b.batch_id} | Qty: ${b.quantity} | Date: ${dateStr}`;
+                batchSelector.appendChild(option);
+            });
+            batchSelector.disabled = false;
         }
     };
 
-    const loadProducts = async () => {
-        const tbody = document.getElementById('product-list-body');
-        const data = await fetchJSON('/api/admin/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: user_id }),
-        });
-
-        tbody.innerHTML = '';
-        if (data && data.products && data.products.length > 0) {
-            data.products.forEach(p => {
-                tbody.innerHTML += `<tr><td>${p.product_id}</td><td>${p.product_name}</td><td>${p.product_sku}</td></tr>`;
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #64748b;">No products found</td></tr>';
+    const renderSelectedBatch = () => {
+        const selectedBatchId = batchSelector.value;
+        
+        if (!selectedBatchId) {
+            resultsContainer.style.display = 'none';
+            return;
         }
+
+        const batch = allBatches.find(b => String(b.batch_id).trim() === selectedBatchId);
+
+        if (!batch) {
+            resultsContainer.style.display = 'none';
+            return;
+        }
+
+        resultsContainer.style.display = 'block';
+        const dateStr = batch.production_date ? new Date(batch.production_date).toLocaleDateString() : 'Unknown Date';
+        
+        let html = `
+            <details class="batch-details" open>
+                <summary>🏭 Batch: ${batch.batch_id} &nbsp;|&nbsp; Quantity: ${batch.quantity} &nbsp;|&nbsp; Date: ${dateStr}</summary>
+                <ul class="item-list">
+        `;
+        
+        const qty = parseInt(batch.quantity, 10) || 0;
+        if (qty > 0) {
+            for(let i = 1; i <= qty; i++) {
+                html += `<li>Item ID: ${batch.batch_id}-${i}</li>`;
+            }
+        } else {
+            html += `<li>No items in this batch.</li>`;
+        }
+        
+        html += `
+                </ul>
+            </details>
+        `;
+
+        resultsContainer.innerHTML = html;
     };
 
-    const loadBatches = async () => {
-        const tbody = document.getElementById('batches-list-body');
-
-        const data = await fetchJSON('/api/admin/production_batches', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: user_id })
-        });
-
-        tbody.innerHTML = '';
-        if (data && data.batches && data.batches.length > 0) {
-            data.batches.forEach(b => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="font-family: monospace;">${b.batch_id}</td>
-                        <td>${b.product_id}</td>
-                        <td>${b.machine_id}</td>
-                        <td>${b.quantity}</td>
-                        <td>${new Date(b.production_date).toLocaleDateString()}</td>
-                        <td>${b.shift || 'N/A'}</td>
-                    </tr>`;
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748b;">No production batches found</td></tr>';
-        }
+    const resetFilters = () => {
+        productSelector.value = "";
+        startDateInput.value = "";
+        endDateInput.value = "";
+        batchSelector.innerHTML = '<option value="" disabled selected>-- Select a Batch --</option>';
+        batchSelector.disabled = true;
+        resultsContainer.style.display = 'none';
+        resultsContainer.innerHTML = '';
     };
 
-    document.getElementById('machine-form').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const btn = this.querySelector('button');
-        const originalText = btn.innerText;
-        btn.innerText = 'Registering...';
-        btn.disabled = true;
-
-        const payload = {
-            user_id: user_id,
-            machine_id: document.getElementById('machine-id').value,
-            machine_name: document.getElementById('machine-name').value,
-            machine_type: document.getElementById('machine-type').value,
-            last_maintenance: document.getElementById('last-maintenance').value
-        };
-
-        const res = await fetch('/api/admin/add_machines', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (res.ok) {
-            window.notify('Machine registered successfully.', 'success');
-            this.reset();
-            loadMachines();
-        } else {
-            window.notify('Connection error. Please try again.', 'error');
-        }
-        btn.innerText = originalText;
-        btn.disabled = false;
-    });
+    productSelector.addEventListener('change', updateBatches);
+    startDateInput.addEventListener('change', updateBatches);
+    endDateInput.addEventListener('change', updateBatches);
+    batchSelector.addEventListener('change', renderSelectedBatch);
+    resetBtn.addEventListener('click', resetFilters);
 
     document.getElementById('product-form').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -456,8 +488,10 @@
         btn.innerText = 'Registering...';
         btn.disabled = true;
 
+        const currentUserId = typeof user_id !== 'undefined' ? user_id : (window.user_id || 1);
+
         const payload = {
-            user_id: user_id,
+            user_id: currentUserId,
             product_id: document.getElementById('product-id').value,
             product_name: document.getElementById('product-name').value,
             product_sku: document.getElementById('product-sku').value
@@ -472,54 +506,15 @@
         if (res.ok) {
             window.notify('Product SKU registered successfully.', 'success');
             this.reset();
-            loadProducts();
+            resetFilters();
+            initializeLookup(); 
         } else {
             window.notify('Connection error. Please try again.', 'error');
         }
-        btn.innerText = originalText;
-        btn.disabled = false;
-    });
-
-    document.getElementById('batch-breakdown-form').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const btn = this.querySelector('button');
-        const originalText = btn.innerText;
-        btn.innerText = 'Analyzing...';
-        btn.disabled = true;
-
-        const batchId = document.getElementById('search-batch-id').value;
-        const tbody = document.getElementById('breakdown-list-body');
-        const resultsArea = document.getElementById('batch-results-area');
-
-        const res = await fetch('/api/admin/batch_details', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ batch_id: batchId })
-        });
-        const data = await res.json();
         
-        tbody.innerHTML = '';
-        resultsArea.style.display = 'block';
-
-        if (data && data.breakdown && data.breakdown.length > 0) {
-            data.breakdown.forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><span style="background: #e2e8f0; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">${item.type}</span></td>
-                        <td><strong>${item.identifier}</strong></td>
-                        <td>${item.quantity} Units</td>
-                    </tr>`;
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #ef4444;">No data found for this Batch ID</td></tr>';
-        }
-
         btn.innerText = originalText;
         btn.disabled = false;
     });
 
-    // Execute immediately so data loads right when the script runs
-    loadMachines();
-    loadProducts();
-    loadBatches();
+    initializeLookup();
 </script>

@@ -79,32 +79,31 @@ router.post("/products", async (req, res) => {
 
 router.post("/production_batches", async (req, res) => {
   try {
-    const { user_id } = req.body; // Pull from request body now
+    // const { user_id } = req.body; // Pull from request body now
 
-    if (!user_id) {
-        return res.status(400).json({ message: "user_id is required" });
-    }
+    // if (!user_id) {
+    //     return res.status(400).json({ message: "user_id is required" });
+    // }
 
-    // 1. Fetch all machine IDs that belong to this user
-    const { data: userMachines, error: machineErr } = await supabase
-        .from("machines")
-        .select("machine_id")
-        .eq("user_id", user_id);
+    // // 1. Fetch all machine IDs that belong to this user
+    // const { data: userMachines, error: machineErr } = await supabase
+    //     .from("machines")
+    //     .select("machine_id")
+    //     .eq("user_id", user_id);
 
-    if (machineErr) throw machineErr;
-    const machineIds = userMachines.map(m => m.machine_id);
+    // if (machineErr) throw machineErr;
+    // const machineIds = userMachines.map(m => m.machine_id);
 
     // 2. Fetch all product IDs that belong to this user
     const { data: userProducts, error: productErr } = await supabase
         .from("products")
-        .select("product_id")
-        .eq("user_id", user_id);
+        .select("product_id");
 
     if (productErr) throw productErr;
     const productIds = userProducts.map(p => p.product_id);
 
     // 3. If the user has no machines or products, return empty array early
-    if (machineIds.length === 0 || productIds.length === 0) {
+    if (productIds.length === 0) {
          return res.json({ batches: [] });
     }
 
@@ -112,7 +111,6 @@ router.post("/production_batches", async (req, res) => {
     const { data: batches, error } = await supabase
         .from("production_batches")
         .select("*")
-        .in("machine_id", machineIds)
         .in("product_id", productIds)
         .order('production_date', { ascending: false });
 

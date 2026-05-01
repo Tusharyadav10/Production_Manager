@@ -129,7 +129,6 @@ operatorForm.addEventListener('submit', async function (e) {
     const operator_id = user_id;
     const batch_id = document.getElementById('batch-id').value;
     const product_id = document.getElementById('product-id').value;
-    const machine_id = document.getElementById('machine-id').value;
     const shift = document.getElementById('shift').value;
     const quantity = document.getElementById('quantity').value;
     const production_date = document.getElementById('production-date').value;
@@ -139,7 +138,7 @@ operatorForm.addEventListener('submit', async function (e) {
             const res = await fetch('/api/operator/log_batch', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ batch_id, product_id, machine_id, operator_id, shift, quantity, production_date })
+                body: JSON.stringify({ batch_id, product_id, operator_id, shift, quantity, production_date })
             });
 
             const data = await res.json();
